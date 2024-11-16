@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   SimpleGrid,
@@ -33,6 +33,10 @@ import {
   BarElement,
   ArcElement,
 } from "chart.js";
+import { DynamicWidget, useDynamicContext } from "@dynamic-labs/sdk-react-core";
+
+import axios from "axios";
+import { useAccount } from "wagmi";
 
 ChartJS.register(
   CategoryScale,
@@ -43,8 +47,24 @@ ChartJS.register(
   Tooltip,
   Legend,
   BarElement,
-  ArcElement
+  ArcElement,
 );
+
+const fetchUser = async (twitter: string, address: string) => {
+  try {
+    if (!twitter || !address) {
+      console.error("Twitter and address are required.");
+      return;
+    }
+    const response = await axios.post("http://localhost:3002/engagr/get-register-promoter", {
+      twitterUsername : twitter,
+      accountAddress : address,
+    });
+    console.log(response, "response");
+  } catch (error: any) {
+    console.error("Error:", error.message);
+  }
+};
 
 const Dashboard = () => {
   // Data for line chart
@@ -117,47 +137,120 @@ const Dashboard = () => {
     boxSizing: "border-box" as const,
   };
 
+  const { user } = useDynamicContext();
+  const account = useAccount()
+
+  useEffect(() => {
+    // const email = user?.email;
+    const address = account?.address;
+    const twitter = user?.verifiedCredentials?.find(
+      (cred) => cred?.oauthProvider === "twitter",
+    )?.oauthUsername;
+
+    if (twitter && address) {
+      console.log("fetching user...");
+      fetchUser(twitter, address);
+    }
+  }, [user]);
+
   return (
-    <Box p={8} bg={bg} minHeight="100vh">
+    <Box p={8} bg={bg}>
+      {!user ? (
+        <div className="flex justify-center items-center h-[80vh]">
+          <DynamicWidget variant="dropdown" innerButtonComponent="Login" />
+        </div>
+      ) : (
+        <>
+          <div className="flex justify-end items-end pb-4 w-full">
+            <div className="w-60"></div>
+            <DynamicWidget variant="dropdown" innerButtonComponent="Login" />
+          </div>
+          <Flex alignItems="center" mb={8}>
+            <Heading size="lg" color={textColor}>
+              Dashboard
+            </Heading>
+            <Spacer />
+            <HStack spacing={4}>
+              <Text fontSize="lg" fontWeight="bold" color={textColor}>
+                Balance: $12,345.67
+              </Text>
+            </HStack>
+          </Flex>
+
+          {/* Stat Cards */}
+          <SimpleGrid columns={{ base: 1, md: 4 }} spacing={6} mb={8}>
+            <StatCard
+              title="Total Users"
+              stat="1,500"
+              icon={FiUsers}
+              change="+5%"
+              cardBg={cardBg}
+              textColor={textColor}
+            />
+            <StatCard
+              title="Revenue"
+              stat="$34,567"
+              icon={FiDollarSign}
+              change="+12%"
+              cardBg={cardBg}
+              textColor={textColor}
+            />
+            <StatCard
+              title="Active Campaigns"
+              stat="24"
+              icon={FiBarChart2}
+              change="-2%"
+              cardBg={cardBg}
+              textColor={textColor}
+            />
+            <StatCard
+              title="Conversions"
+              stat="320"
+              icon={FiPieChart}
+              change="+8%"
+              cardBg={cardBg}
+              textColor={textColor}
+            />
+          </SimpleGrid>
+
+          {/* Charts Section */}
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8} mb={8}>
+            {/* Line Chart */}
+            <Box {...chartContainerStyle}>
+              <Text fontWeight="bold" mb={2} color={textColor}>
+                Revenue Over Time
+              </Text>
+              <Line data={lineChartData} />
+            </Box>
+
+            {/* Donut Chart */}
+            <Box {...chartContainerStyle}>
+              <Text fontWeight="bold" mb={2} color={textColor}>
+                Traffic Sources
+              </Text>
+              <Doughnut data={donutChartData} options={donutChartOptions} />
+            </Box>
+          </SimpleGrid>
+
+          {/* Full-width Campaign Performance Chart */}
+          <Box
+            p="0.5rem"
+            bg={cardBg}
+            borderRadius="md"
+            boxShadow="md"
+            width="100%"
+            height="250px"
+            boxSizing="border-box"
+            as="section"
+          >
+            <Text fontWeight="bold" mb={2} color={textColor}>
+              Campaign Performance
+            </Text>
+            <Line data={barChartData} />
+          </Box>
+        </>
+      )}
       {/* Balance and Header */}
-      <Flex alignItems="center" mb={8}>
-        <Heading size="lg" color={textColor}>Dashboard</Heading>
-        <Spacer />
-        <HStack spacing={4}>
-          <Text fontSize="lg" fontWeight="bold" color={textColor}>
-            Balance: $12,345.67
-          </Text>
-        </HStack>
-      </Flex>
-
-      {/* Stat Cards */}
-      <SimpleGrid columns={{ base: 1, md: 4 }} spacing={6} mb={8}>
-        <StatCard title="Total Users" stat="1,500" icon={FiUsers} change="+5%" cardBg={cardBg} textColor={textColor} />
-        <StatCard title="Revenue" stat="$34,567" icon={FiDollarSign} change="+12%" cardBg={cardBg} textColor={textColor} />
-        <StatCard title="Active Campaigns" stat="24" icon={FiBarChart2} change="-2%" cardBg={cardBg} textColor={textColor} />
-        <StatCard title="Conversions" stat="320" icon={FiPieChart} change="+8%" cardBg={cardBg} textColor={textColor} />
-      </SimpleGrid>
-
-      {/* Charts Section */}
-      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8} mb={8}>
-        {/* Line Chart */}
-        <Box {...chartContainerStyle}>
-          <Text fontWeight="bold" mb={2} color={textColor}>Revenue Over Time</Text>
-          <Line data={lineChartData} />
-        </Box>
-        
-        {/* Donut Chart */}
-        <Box {...chartContainerStyle}>
-          <Text fontWeight="bold" mb={2} color={textColor}>Traffic Sources</Text>
-          <Doughnut data={donutChartData} options={donutChartOptions} />
-        </Box>
-      </SimpleGrid>
-
-      {/* Full-width Campaign Performance Chart */}
-      <Box p="0.5rem" bg={cardBg} borderRadius="md" boxShadow="md" width="100%" height="250px" boxSizing="border-box" as="section">
-        <Text fontWeight="bold" mb={2} color={textColor}>Campaign Performance</Text>
-        <Line data={barChartData} />
-      </Box>
     </Box>
   );
 };

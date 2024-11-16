@@ -26,7 +26,7 @@ interface CreateAdProps {
   handlePrevious: () => void;
   handleNext: () => void;
   mediaFile : FileList | null,
-  setMediaFile : (media: FileList | null) => void;
+  setMediaFile : (media: File | null) => void;
 }
 
 const CreateAd: React.FC<CreateAdProps> = ({
