@@ -19,6 +19,10 @@ const client = new SignProtocolClient(SpMode.OnChain, {
 });
 
 const createLinkedAttestation = async (linkedAttestationId, adId, marketer, promoters_username, prevClickValue, currentClickValue ) => {
+  
+  // console all inputs
+  console.log(linkedAttestationId, adId, marketer, promoters_username, prevClickValue, currentClickValue);
+  
   const attestationDataSchemaA1 = {
     schemaId: "0xa1",
     linkedAttestationId, // Linking
@@ -38,6 +42,7 @@ const createLinkedAttestation = async (linkedAttestationId, adId, marketer, prom
       attestationDataSchemaA1
     );
     console.log("Linked attestation created:", createAttestationRes);
+    return createAttestationRes;
   } catch (error) {
     console.error("Error creating linked attestation:", error);
   }
@@ -65,12 +70,16 @@ router.get('/:shortId', async (req, res) => {
   const shortUrl = `${config.DEPLOY_URL}/engagr/attest/${shortId}`
   const shortUrlData = await ShortUrl.findOne({ shortUrl })
   const originalUrl = shortUrlData.originalUrl
-  shortUrlData.currentValue = shortUrlData.currentValue + 1;
+  console.log(shortUrlData)
+  shortUrlData.clickCount = shortUrlData.clickCount + 1;
+  console.log(shortUrlData, 'shortUrlData')
+
   const adData = await Ad.findOne({ shortUrl: shortUrl })
+  console.log(adData, 'adData')
+  const attestation = await createLinkedAttestation(adData.attestationId, adData._id, adData.marketer, adData.promoters, (shortUrlData.clickCount > 0 ? shortUrlData.clickCount-1 : 0), shortUrlData.clickCount);
 
-  const attestation = await createLinkedAttestation(adData.attestationId, adData._id, adData.marketer, adData.promoters, shortUrlData.currentValue-1, shortUrlData.currentValue);
-
-  shortUrlData.attestationId = attestation.id;
+  shortUrlData.attestationId = attestation.attestationId;
+  console.log(shortUrlData, 'shortUrlData')
   await shortUrlData.save();
 
   if (!originalUrl) {

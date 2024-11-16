@@ -186,14 +186,14 @@ export const fetchAndCheckUserTweetsAndPushAds = async (twitterId, addDescriptio
       const unixTimestamp = Math.floor(new Date(tweetStats.created_at).getTime() / 1000);
 
       console.log('Tweet created at:', unixTimestamp)
-      console.log('Ad start time:', ad.created_at)
+      console.log('Ad start time:', ad.createdAt)
       console.log(ad)
       if (unixTimestamp < ad.createdAt) {
         console.log('Tweet is older than the campaign start time. Skipping...')
         continue
       }
 
-      const existingTweet = await ProcessedUserTweetsForAds.findOne({ tweetId: tweet.id })
+      const existingTweet = await ProcessedUserTweetsForAds.findOne({ tweetId: tweet.id, adId })
 
       if (!existingTweet) {
         const localPath = path.resolve('./temp_image.jpg')
