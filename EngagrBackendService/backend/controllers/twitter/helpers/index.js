@@ -185,7 +185,7 @@ export const fetchAndCheckUserTweetsAndPushAds = async (twitterId, addDescriptio
       console.log('Tweet Stats:', tweetStats)
       const unixTimestamp = Math.floor(new Date(tweetStats.created_at).getTime() / 1000);
 
-      if (unixTimestamp < ad.created_at) {
+      if (unixTimestamp < ad.createdAt) {
         console.log('Tweet is older than the campaign start time. Skipping...')
         continue
       }
