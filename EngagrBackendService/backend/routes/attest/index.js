@@ -18,7 +18,6 @@ const client = new SignProtocolClient(SpMode.OnChain, {
   account: privateKeyToAccount(privateKey),
 });
 
-
 const createLinkedAttestation = async (linkedAttestationId, adId, marketer, promoters_username, prevClickValue, currentClickValue ) => {
   const attestationDataSchemaA1 = {
     schemaId: "0xa1",

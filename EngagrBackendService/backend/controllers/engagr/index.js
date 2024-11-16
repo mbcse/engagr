@@ -9,6 +9,7 @@ import { SignProtocolClient, SpMode, EvmChains } from "@ethsign/sp-sdk";
 import { privateKeyToAccount } from "viem/accounts";
 import dotenv from "dotenv";
 import { ethers } from 'ethers';
+import { ENGAGR_ABI, ENGAGR_CONTRACT_ADDRESS } from '../../config/abi.js';
 dotenv.config();
 
 const privateKey = process.env.ADMIN_PRIVATE_KEY;
@@ -73,6 +74,9 @@ export const getOrRegisterMarketer = async (req, res) => {
     marketer = new Marketer({ accountAddress, email })
     await marketer.save()
 
+    const contract = new ethers.Contract(ENGAGR_CONTRACT_ADDRESS[80002], ENGAGR_ABI, wallet);
+    const tx = await contract.registerMarketer(marketer._id, accountAddress, email);
+    await tx.wait();
     // Return the new marketer's ID
     return res.status(201).json({ userId: marketer._id })
   } catch (error) {
@@ -112,7 +116,9 @@ export const getOrRegisterPromoter = async (req, res) => {
       twitterData: promoterTwitterData.data || {}
     })
     await promoter.save()
-
+    const contract = new ethers.Contract(ENGAGR_CONTRACT_ADDRESS[80002], ENGAGR_ABI, wallet);
+    const tx = await contract.registerPromoter(promoter._id,twitterUsername, accountAddress);
+    await tx.wait();
     // Return the new promoter's ID
     return res.status(201).json({ userId: promoter._id })
   } catch (error) {
