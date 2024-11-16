@@ -15,6 +15,7 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
+import axios from "axios";
 
 interface CreateAdProps {
   adText: string;
@@ -60,9 +61,13 @@ const CreateAd: React.FC<CreateAdProps> = ({
   const [attestedLink, setAttestedLink] = useState(false);
 
   console.log(attestedLink, "attestedLink");
-  const getAttestedLink = () => {
+  const getAttestedLink = async () => {
     try {
-      setAdText(adText + " " + `\n\ http://localhost:3000/promoter`);
+      // const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_DEPLOYED_URL}/engagr/attest/shorten`, {
+        // originalUrl: websiteDetails,
+      // });
+      // console.log(response, "response ATTEST LINK");
+      // setAdText(adText + " " + `\n\ ${response.data.shortUrl}`);
       setAttestedLink(true);
     } catch (error) {
       setAttestedLink(false);
@@ -84,6 +89,11 @@ const CreateAd: React.FC<CreateAdProps> = ({
             onChange={(e) => setAdText(e.target.value)}
             size="lg"
           />
+        </FormControl>
+
+        <FormControl mt={4}>
+          <FormLabel>Add Link</FormLabel>
+          <Input onChange={(e) => setWebsiteDetails(e.target.value)} value={websiteDetails} />
         </FormControl>
 
         <FormControl mt={4}>
@@ -145,11 +155,6 @@ const CreateAd: React.FC<CreateAdProps> = ({
           </HStack>
           <Divider my={4} />
           <Text>{adText || "What's happening?"}</Text>
-          {websiteDetails && (
-            <Text mt={2} color="blue.500">
-              {websiteDetails}
-            </Text>
-          )}
           {media && <Image src={media} alt="Uploaded Media" borderRadius="md" mt={4} />}
         </Box>
       </Box>

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   VStack,
@@ -20,6 +20,7 @@ import {
   SliderThumb,
 } from "@chakra-ui/react";
 import AllocateBudget, { type MarketingGoal } from "./AllocateBudget";
+import TokenSelector from "../TokenSelector";
 
 interface CustomizeDeliveryProps {
   dailyBudget: string;
@@ -34,6 +35,9 @@ interface CustomizeDeliveryProps {
   setMarketingGoals: (goals: MarketingGoal[]) => void;
   followerRange: number;
   setFollowerRange: (range: number) => void;
+  setSelectedToken : any;
+  selectedToken : any;
+  tokenList : any;
 }
 
 const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
@@ -49,7 +53,11 @@ const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
   setMarketingGoals,
   followerRange,
   setFollowerRange,
+  setSelectedToken,
+  selectedToken,
+  tokenList,
 }) => {
+
   return (
     <Box
       p={6}
@@ -66,7 +74,8 @@ const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
           Budget & Schedule
         </Text>
         <Text color="gray.400" fontSize="sm">
-          Set a budget that fits your needs and a duration in minutes for better control of your spend.
+          Set a budget that fits your needs and a duration in minutes for better control of your
+          spend.
           <Text as="span" color="blue.500" cursor="pointer" textDecoration="underline">
             Learn more
           </Text>
@@ -75,13 +84,7 @@ const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
         {/* Daily Budget Input */}
         <HStack spacing={4}>
           <FormControl>
-            <FormLabel>Daily Budget</FormLabel>
             <HStack>
-              <Select width="80px" defaultValue="USD">
-                <option value="USD">USD</option>
-                <option value="EUR">EUR</option>
-                <option value="GBP">GBP</option>
-              </Select>
               <Input
                 type="number"
                 value={dailyBudget}
@@ -115,7 +118,6 @@ const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
             defaultValue={followerRange}
             min={0}
             max={100}
-      
             onChange={(value) => setFollowerRange(value)}
           >
             <SliderTrack>
@@ -130,26 +132,23 @@ const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
       </VStack>
 
       {/* Payment Method Section */}
-      <VStack align="stretch" spacing={6} mt={8}>
+      <VStack align="stretch" spacing={6} mt={4}>
         <Text fontSize="xl" fontWeight="bold">
           Payment Method
         </Text>
-        {!paymentMethod && (
-          <Alert status="error" borderRadius="md" className="text-black">
-            <AlertIcon />
-            You need to select a payment method.
-          </Alert>
-        )}
-        <HStack justifyContent="space-between" mt={4} mb={8}>
-          <Text color="gray.300" fontSize="sm">
-            No payment method selected
-          </Text>
+
+        <HStack justifyContent="space-between" className="pb-8">
+          <TokenSelector
+            selectedToken={selectedToken}
+            setSelectedToken={setSelectedToken}
+            tokens={tokenList}
+          />
           <Button
             onClick={() => setPaymentMethod("Credit Card")}
             colorScheme="blue"
             variant="outline"
           >
-            + Add Credit Card
+            + Pay Now
           </Button>
         </HStack>
       </VStack>

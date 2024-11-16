@@ -15,6 +15,7 @@ import { createConfig, http } from "wagmi";
 import {
 
   base,
+  polygonAmoy
 
 } from "wagmi/chains";
 
@@ -54,10 +55,12 @@ const connectors = connectorsForWallets(
 const transports: Record<number, Transport> = {
   
   [base.id]: http(),
+  [polygonAmoy.id]: http(),
 };
 export const wagmiConfig = createConfig({
   chains: [
     base,
+    polygonAmoy
   ],
   connectors,
   transports,
