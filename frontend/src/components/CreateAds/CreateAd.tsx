@@ -27,7 +27,7 @@ interface CreateAdProps {
   handlePrevious: () => void;
   handleNext: () => void;
   setMediaFile: (media: FileList | null) => void;
-  attestedLink : boolean,
+  attestedLink : string,
   setAttestedLink : (attestedLink: string) => void;
 }
 

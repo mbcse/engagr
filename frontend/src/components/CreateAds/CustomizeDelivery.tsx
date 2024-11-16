@@ -32,9 +32,10 @@ interface CustomizeDeliveryProps {
   setMarketingGoals: (goals: MarketingGoal[]) => void;
   followerRange: number;
   setFollowerRange: (range: number) => void;
-  setSelectedToken : any;
-  selectedToken : any;
-  tokenList : any;
+  setSelectedToken: any;
+  selectedToken: any;
+  tokenList: any;
+  loading: boolean;
 }
 
 const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
@@ -52,8 +53,10 @@ const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
   setSelectedToken,
   selectedToken,
   tokenList,
+  loading,
 }) => {
 
+  console.log(loading, 'loading')
   return (
     <Box
       p={6}
@@ -79,7 +82,6 @@ const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
 
         {/* Daily Budget Input */}
         <HStack spacing={4}>
-
           {/* Duration Input in Minutes */}
           <FormControl>
             <FormLabel>Duration (Minutes)</FormLabel>
@@ -130,11 +132,11 @@ const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
             setSelectedToken={setSelectedToken}
             tokens={tokenList}
           />
-        <Input
-                type="number"
-                value={dailyBudget}
-                onChange={(e) => setDailyBudget(e.target.value)}
-              />
+          <Input
+            type="number"
+            value={dailyBudget}
+            onChange={(e) => setDailyBudget(e.target.value)}
+          />
         </HStack>
       </VStack>
 
@@ -145,6 +147,7 @@ const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
         marketingGoals={marketingGoals}
         setMarketingGoals={setMarketingGoals}
         handleFinish={handleFinish}
+        loading={loading}
       />
 
       {/* Navigation Buttons */}
