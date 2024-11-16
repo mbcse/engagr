@@ -7,6 +7,8 @@ import CreateAd from "./CreateAd";
 import CustomizeDelivery from "./CustomizeDelivery";
 
 import { uploadFile, uploadJson } from "@/utils/ipfsHelper";
+import { useAccount } from "wagmi";
+import axios from "axios";
 
 const CreateAds: React.FC = () => {
   // States for objectives
@@ -44,24 +46,40 @@ const CreateAds: React.FC = () => {
     }
   };
 
+  const { chainId, address } = useAccount();
+
   const handleFinish = async () => {
-    console.log("Campaign successfully created!", {
-      selectedObjective,
-      adText,
-      websiteDetails,
-      media,
-      dailyBudget,
-      dateRange,
-      paymentMethod,
-      mediaFile,
-    });
-    
+    console.log("Campaign successfully created!");
+
     let ImageHash = await uploadFile(mediaFile);
     const LightHouseGateway = "https://gateway.lighthouse.storage/";
     ImageHash = ImageHash.replace("://", "/");
     const fullUrl = `${LightHouseGateway}${ImageHash}`;
 
     console.log(fullUrl, "treatImageHash");
+
+    const payload = {
+      adDescription: adText,
+      // websiteDetails,
+      media: fullUrl,
+      amountAllocated: dailyBudget,
+      // dateRange,
+      // paymentMethod,
+      // mediaFile,
+      chainId: chainId,
+      endtimestamp: Math.floor(Date.now() / 1000) + 4 * 60,
+      requiredFollowers: 100,
+      marketer: address,
+      objective: selectedObjective,
+    };
+
+    console.log(payload, "payload ----");
+    try {
+      const response = await axios.post("http://localhost:3002/engagr/register-ad", payload);
+      console.log(response, "response from server");
+    } catch (error: any) {
+      console.error("Error:", error.message);
+    }
 
     alert("Campaign successfully created!");
   };

@@ -2,6 +2,7 @@ import React from "react";
 import CreateAds from "../CreateAds";
 import CampaignHistory from "../Campaigns/CampaignHistory";
 import Dashboard from "../Promoter/Dashboard";
+import MarketDashboard from "../Marketer/Dashboard";
 
 type DynamicContentProps = {
   activeContent: string;
@@ -12,12 +13,7 @@ const DynamicContent: React.FC<DynamicContentProps> = ({ activeContent, role }) 
   const renderAdminContent = () => {
     switch (activeContent) {
       case "dashboard":
-        return (
-          <div>
-            <h1 className="text-2xl font-semibold mb-4">Admin Dashboard</h1>
-            <p>Welcome, Admin! Here's an overview of your admin activities.</p>
-          </div>
-        );
+        return <MarketDashboard />;
       case "campaign":
         return <CreateAds />;
       case "campaign_history":
