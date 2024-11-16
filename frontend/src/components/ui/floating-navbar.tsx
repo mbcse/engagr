@@ -4,8 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/utils";
 import Link from "next/link";
 import { IconHome, IconMessage, IconUser } from "@tabler/icons-react";
-import { DynamicWidget, useDynamicContext } from "@dynamic-labs/sdk-react-core";
-import Axios from "@/utils/axiosRequest";
 
 const navItems = [
   {
@@ -26,7 +24,7 @@ const navItems = [
 ];
 
 export const FloatingNav = ({ className }: { className?: string }) => {
-  // const { user } = useDynamicContext();
+  
   const [visible, setVisible] = useState(true);
 
   return (

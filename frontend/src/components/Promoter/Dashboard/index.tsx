@@ -34,7 +34,9 @@ import {
   ArcElement,
 } from "chart.js";
 import { DynamicWidget, useDynamicContext } from "@dynamic-labs/sdk-react-core";
-import Axios from "@/utils/axiosRequest";
+
+import axios from "axios";
+import { useAccount } from "wagmi";
 
 ChartJS.register(
   CategoryScale,
@@ -48,25 +50,15 @@ ChartJS.register(
   ArcElement,
 );
 
-interface MarketerRequest {
-  email: string;
-  twitter: string;
-}
-
-interface MarketerResponse {
-  userId: string;
-}
-
-const fetchUser = async (email: string, twitter: string) => {
+const fetchUser = async (twitter: string, address: string) => {
   try {
-    if (!email || !twitter) {
-      console.error("Email and Twitter username are required.");
+    if (!twitter || !address) {
+      console.error("Twitter and address are required.");
       return;
     }
-
-    const response = await Axios("POST", "http://localhost:3002/engagr/get-register-promoter", {
-      email,
-      twitter,
+    const response = await axios.post("http://localhost:3002/engagr/get-register-promoter", {
+      twitterUsername : twitter,
+      accountAddress : address,
     });
     console.log(response, "response");
   } catch (error: any) {
@@ -146,16 +138,18 @@ const Dashboard = () => {
   };
 
   const { user } = useDynamicContext();
+  const account = useAccount()
 
   useEffect(() => {
-    const email = user?.email;
+    // const email = user?.email;
+    const address = account?.address;
     const twitter = user?.verifiedCredentials?.find(
       (cred) => cred?.oauthProvider === "twitter",
     )?.oauthUsername;
 
-    console.log(email, twitter, "email, twitter");
-    if (email && twitter) {
-      fetchUser(email, twitter);
+    if (twitter && address) {
+      console.log("fetching user...");
+      fetchUser(twitter, address);
     }
   }, [user]);
 
