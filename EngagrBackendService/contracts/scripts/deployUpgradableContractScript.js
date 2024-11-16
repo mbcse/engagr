@@ -19,7 +19,7 @@ async function main () {
 
   const deployHelpers = await getDeployHelpers();
 
-  await deployUpgradableContract(hre, deployHelpers.chainId, "TestUpgradableContract", deployHelpers.payDeployer, [1, "Hello"])
+  await deployUpgradableContract(hre, deployHelpers.chainId, "Engagr", deployHelpers.payDeployer, [])
 }
 
 main().catch((error) => {
