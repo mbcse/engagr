@@ -9,6 +9,8 @@ import path from 'path'
 
 import fs from 'fs/promises'
 
+const existingTweet = await Tweet.findOne({ tweetId: '123' })
+
 const twitterClient = new TwitterApi({
   appKey: 'iJK45zWpfBfki8zGAglhCI3Q9',
   appSecret: 'rBXsxilwpGRz0Ek0GNMPazRLQ0QnvjqJioAhiDW8IMg54vpbqi',
@@ -155,8 +157,8 @@ const downloadImageFromIPFS = async (ipfsLink, localPath) => {
 const fetchAndCheckUserTweetsAndPushAds = async (userId, addDescription, imageIpfsLink) => {
   try {
     const tweets = await twitterClient.v2.userTimeline(userId, { max_results: 5 })
-
-    for (const tweet of tweets.data) {
+    console.log(tweets)
+    for (const tweet of tweets._realData.data) {
       const existingTweet = await PromotedTweet.findOne({ tweetId: tweet.id })
 
       if (!existingTweet) {
@@ -193,4 +195,5 @@ const fetchAndCheckUserTweetsAndPushAds = async (userId, addDescription, imageIp
 // Set up a polling interval (every minute)
 // setInterval(fetchMentions, 60000)
 
-getUserInfoByUsername('mbcse50')
+// getUserInfoByUsername('mbcse50')
+// fetchMentions()

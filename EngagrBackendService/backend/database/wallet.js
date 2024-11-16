@@ -30,12 +30,7 @@ const walletSchema = new Schema({
     enum: Object.values(config.DB_CONSTANTS.NETWORK_TYPES)
   }
 
-}, {
-  timestamps: {
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
-  }
-})
+}, { timestamps: true })
 
 const Wallet = mongoose.model('wallets', walletSchema)
 export default Wallet
