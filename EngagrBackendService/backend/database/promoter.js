@@ -5,14 +5,20 @@ import config from '../config'
 const Schema = mongoose.Schema
 
 const promotersSchema = new Schema({
-  userId: String,
+  twitterId: String,
   twitterUsername: String,
   followers: Number,
   twitterData: Object,
-  promotedTweets: [{
+  processedCommentedTweets: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'promotedTweets'
+    ref: 'processedUserTweetsForAds'
   }],
+  promotedAds: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ads'
+    }
+  ],
   payoutBalance: {
     type: Number,
     default: 0

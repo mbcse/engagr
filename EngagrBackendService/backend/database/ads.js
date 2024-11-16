@@ -10,7 +10,14 @@ const adsSchema = new Schema({
   endtimestamp: Number,
   media: String,
   requiredFollowers: Number,
-  marketer: String
+  marketer: String,
+  objective: String,
+  promoters: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'promoters'
+    }
+  ]
 }, { timestamps: true })
 
 const model = mongoose.model('ads', adsSchema)
