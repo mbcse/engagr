@@ -12,12 +12,12 @@ import {
   Text,
   Heading,
   HStack,
-  Button,
+  Center,
+  Spacer,
+  VStack,
   Icon,
   Flex,
-  Spacer,
   useColorModeValue,
-  Center,
 } from "@chakra-ui/react";
 import { FiUsers, FiBarChart2, FiDollarSign, FiPieChart } from "react-icons/fi";
 import { Line, Doughnut } from "react-chartjs-2";
@@ -34,7 +34,6 @@ import {
   ArcElement,
 } from "chart.js";
 import { DynamicWidget, useDynamicContext } from "@dynamic-labs/sdk-react-core";
-
 import axios from "axios";
 import { useAccount } from "wagmi";
 
@@ -56,7 +55,7 @@ const fetchUser = async (twitter: string, address: string) => {
       console.error("Twitter and address are required.");
       return;
     }
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_DEPLOYED_URL}/engagr/get-register-promoter`, {
+    const response = await axios.post("http://localhost:3002/engagr/get-register-promoter", {
       twitterUsername: twitter,
       accountAddress: address,
     });
@@ -67,7 +66,6 @@ const fetchUser = async (twitter: string, address: string) => {
 };
 
 const Dashboard = () => {
-  // Data for line chart
   const lineChartData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
     datasets: [
@@ -82,7 +80,6 @@ const Dashboard = () => {
     ],
   };
 
-  // Data for donut chart
   const donutChartData = {
     labels: ["Organic", "Paid", "Referral", "Social"],
     datasets: [
@@ -96,7 +93,6 @@ const Dashboard = () => {
     ],
   };
 
-  // Options for donut chart with legend on the right
   const donutChartOptions = {
     plugins: {
       legend: {
@@ -110,7 +106,6 @@ const Dashboard = () => {
     },
   };
 
-  // Data for bar chart (Campaign Performance)
   const barChartData = {
     labels: ["Campaign 1", "Campaign 2", "Campaign 3", "Campaign 4"],
     datasets: [
@@ -123,25 +118,25 @@ const Dashboard = () => {
     ],
   };
 
-  // Colors for dark/light mode
   const bg = "gray.900";
   const cardBg = "gray.800";
   const textColor = "white";
 
   const chartContainerStyle = {
-    p: "0.5rem",
+    p: 4,
     bg: cardBg,
     borderRadius: "md",
     boxShadow: "md",
-    height: "250px",
-    boxSizing: "border-box" as const,
+    height: "300px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   };
 
   const { user } = useDynamicContext();
   const account = useAccount();
 
   useEffect(() => {
-    // const email = user?.email;
     const address = account?.address;
     const twitter = user?.verifiedCredentials?.find(
       (cred) => cred?.oauthProvider === "twitter",
@@ -153,106 +148,81 @@ const Dashboard = () => {
     }
   }, [user]);
 
-
-  return (
-    <Box p={8}>
-      {false ? (
-        <div className="flex justify-center items-center h-[80vh]">
-          <DynamicWidget variant="dropdown" innerButtonComponent="Login" />
-        </div>
-      ) : (
-        <>
-          <div className="flex justify-end items-end pb-4 w-full">
-            <div className="w-60"></div>
-            <DynamicWidget variant="dropdown" innerButtonComponent="Login" />
-          </div>
-          <Flex alignItems="center" mb={8}>
-            <Heading size="lg" color={textColor}>
-              Dashboard
-            </Heading>
-            <Spacer />
-            <HStack spacing={4}>
-              <Text fontSize="lg" fontWeight="bold" color={textColor}>
-                Balance: $12,345.67
-              </Text>
-            </HStack>
-          </Flex>
-
-          {/* Stat Cards */}
-          <SimpleGrid columns={{ base: 1, md: 4 }} spacing={6} mb={8}>
-            <StatCard
-              title="Total Users"
-              stat="1,500"
-              icon={FiUsers}
-              change="+5%"
-              cardBg={cardBg}
-              textColor={textColor}
-            />
-            <StatCard
-              title="Revenue"
-              stat="$34,567"
-              icon={FiDollarSign}
-              change="+12%"
-              cardBg={cardBg}
-              textColor={textColor}
-            />
-            <StatCard
-              title="Active Campaigns"
-              stat="24"
-              icon={FiBarChart2}
-              change="-2%"
-              cardBg={cardBg}
-              textColor={textColor}
-            />
-            <StatCard
-              title="Conversions"
-              stat="320"
-              icon={FiPieChart}
-              change="+8%"
-              cardBg={cardBg}
-              textColor={textColor}
-            />
-          </SimpleGrid>
-
-          {/* Charts Section */}
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8} mb={8}>
-            {/* Line Chart */}
-            <Box {...chartContainerStyle}>
-              <Text fontWeight="bold" mb={2} color={textColor}>
-                Revenue Over Time
-              </Text>
-              <Line data={lineChartData} />
-            </Box>
-
-            {/* Donut Chart */}
-            <Box {...chartContainerStyle}>
-              <Text fontWeight="bold" mb={2} color={textColor}>
-                Traffic Sources
-              </Text>
-              <Doughnut data={donutChartData} options={donutChartOptions} />
-            </Box>
-          </SimpleGrid>
-
-          {/* Full-width Campaign Performance Chart */}
-          <Box
-            p="0.5rem"
-            bg={cardBg}
-            borderRadius="md"
-            boxShadow="md"
-            width="100%"
-            height="250px"
-            boxSizing="border-box"
-            as="section"
-          >
-            <Text fontWeight="bold" mb={2} color={textColor}>
-              Campaign Performance
+  return !user ? (
+    <div className="flex justify-center items-center h-[80vh]">
+      <DynamicWidget variant="dropdown" innerButtonComponent="Login" />
+    </div>
+  ) : (
+    <>
+     
+      <Box p={8} bg={bg} minHeight="100vh">
+         {/* <div className="flex justify-end items-end pb-4 w-full">
+        <div className="w-60"></div>
+        <DynamicWidget variant="dropdown" innerButtonComponent="Login" />
+      </div> */}
+        <Flex alignItems="center" mb={8}>
+          <Heading size="lg" color={textColor}>
+            Dashboard
+          </Heading>
+          <Spacer />
+          <HStack spacing={4}>
+            <Text fontSize="lg" fontWeight="bold" color={textColor}>
+              Balance: $12,345.67
             </Text>
-            <Line data={barChartData} />
+          </HStack>
+        </Flex>
+
+        {/* Stat Cards */}
+        <SimpleGrid columns={{ base: 1, md: 4 }} spacing={6} mb={8}>
+          <StatCard
+            title="Total Users"
+            stat="1,500"
+            icon={FiUsers}
+            change="+5%"
+            cardBg={cardBg}
+            textColor={textColor}
+          />
+          <StatCard
+            title="Revenue"
+            stat="$34,567"
+            icon={FiDollarSign}
+            change="+12%"
+            cardBg={cardBg}
+            textColor={textColor}
+          />
+          <StatCard
+            title="Active Campaigns"
+            stat="24"
+            icon={FiBarChart2}
+            change="-2%"
+            cardBg={cardBg}
+            textColor={textColor}
+          />
+          <StatCard
+            title="Conversions"
+            stat="320"
+            icon={FiPieChart}
+            change="+8%"
+            cardBg={cardBg}
+            textColor={textColor}
+          />
+        </SimpleGrid>
+
+        {/* Charts Section */}
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
+          <Box {...chartContainerStyle}>
+            <Line data={lineChartData} />
           </Box>
-        </>
-      )}
-      {/* Balance and Header */}
-    </Box>
+          <Box {...chartContainerStyle}>
+            <Doughnut data={donutChartData} options={donutChartOptions} />
+          </Box>
+        </SimpleGrid>
+
+        <Box {...chartContainerStyle} mt={8}>
+          <Line data={barChartData} />
+        </Box>
+      </Box>
+    </>
   );
 };
 
@@ -265,24 +235,42 @@ interface StatCardProps {
   textColor: string;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ title, stat, icon, change, cardBg, textColor }) => {
-  return (
-    <Box p={4} bg={cardBg} borderRadius="md" boxShadow="md">
-      <Center h="100%">
-        <HStack>
-          <Icon as={icon} boxSize={8} color="blue.500" />
-          <Stat>
-            <StatLabel color={textColor}>{title}</StatLabel>
-            <StatNumber color={textColor}>{stat}</StatNumber>
-            <StatHelpText color={change.startsWith("+") ? "green.400" : "red.400"}>
-              <StatArrow type={change.startsWith("+") ? "increase" : "decrease"} />
-              {change}
-            </StatHelpText>
-          </Stat>
-        </HStack>
-      </Center>
-    </Box>
-  );
-};
+const StatCard = ({ title, stat, icon, change, cardBg, textColor }: StatCardProps) => (
+  <Box
+    p={6}
+    bg={cardBg}
+    borderRadius="lg"
+    boxShadow="md"
+    textAlign="center"
+    display="flex"
+    flexDirection="column"
+    alignItems="center"
+    gap={3}
+    _hover={{
+      bg: "blue.600", // Darkens the background
+      transform: "translateY(-8px)",
+      boxShadow: "xl",
+    }}
+  >
+    {/* Icon Container */}
+    <Center bg="blue.500" w="12" h="12" borderRadius="full">
+      <Icon as={icon} w={6} h={6} color="white" />
+    </Center>
+
+    {/* Statistics Content */}
+    <Stat>
+      <StatLabel color={textColor} fontSize="sm" mb={1}>
+        {title}
+      </StatLabel>
+      <StatNumber color={textColor} fontSize="2xl" fontWeight="bold">
+        {stat}
+      </StatNumber>
+      <StatHelpText color={change.startsWith("+") ? "green.400" : "red.400"} mt={2}>
+        <StatArrow type={change.startsWith("+") ? "increase" : "decrease"} />
+        {change}
+      </StatHelpText>
+    </Stat>
+  </Box>
+);
 
 export default Dashboard;

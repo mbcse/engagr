@@ -3,6 +3,7 @@ import CreateAds from "../CreateAds";
 import CampaignHistory from "../Campaigns/CampaignHistory";
 import Dashboard from "../Promoter/Dashboard";
 import MarketDashboard from "../Marketer/Dashboard";
+import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
 
 type DynamicContentProps = {
   activeContent: string;
@@ -50,7 +51,11 @@ const DynamicContent: React.FC<DynamicContentProps> = ({ activeContent, role }) 
 
   // Determine which content to render based on the role
   return (
-    <div className="">
+    <div className="p-4 bg-slate-900">
+        <div className="flex justify-end items-end pb-4 w-full">
+        <div className="w-60"></div>
+        <DynamicWidget variant="dropdown" innerButtonComponent="Login" />
+      </div>
       {role === "admin" ? renderAdminContent() : renderPromoterContent()}
     </div>
   );

@@ -3,9 +3,9 @@ import { Box, Flex } from "@chakra-ui/react";
 
 import { Footer, Header, MainPane } from "@/components";
 import { FloatingNav } from "@/components/Home/FloatingNav";
-import { HeroScrollDemo } from "@/components/Home/ContainerScroll";
-import { WobbleCardDemo } from "@/components/Home/WobbleCard";
-import { Partners } from "@/components/Home/Partners";
+// import { HeroScrollDemo } from "@/components/Home/ContainerScroll";
+// import { WobbleCardDemo } from "@/components/Home/WobbleCard";
+// import { Partners } from "@/components/Home/Partners";
 
 export default function Home() {
   return (
@@ -22,9 +22,9 @@ export default function Home() {
 
       <FloatingNav />
 
-      <HeroScrollDemo />
+      {/* <HeroScrollDemo />
       <Partners />
-      <WobbleCardDemo />
+      <WobbleCardDemo /> */}
     </Flex>
   );
 }
