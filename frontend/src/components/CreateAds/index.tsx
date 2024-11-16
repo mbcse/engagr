@@ -14,6 +14,7 @@ import { ERC20ABI, TOKEN_ENGAGR_ABI, TOKEN_ENGAGR_CONTRACT_ADDRESS } from "@/con
 import { ethers } from "ethers";
 
 const CreateAds: React.FC = () => {
+  const account = useAccount()
   // States for objectives
   const [selectedObjective, setSelectedObjective] = useState<string>("");
 
@@ -142,20 +143,20 @@ const CreateAds: React.FC = () => {
     // transactions
 
     console.log(payload, "payload ----");
-    // try {
-    //   const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_DEPLOYED_URL}/engagr/register-ad`, payload);
-    //   console.log(response, "response from server");
-    // } catch (error: any) {
-    //   console.error("Error:", error.message);
-    // }
+    let response = null;
+    try {
+      response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_DEPLOYED_URL}/engagr/register-ad`, payload);
+      console.log(response, "response from server");
+    } catch (error: any) {
+      console.error("Error:", error.message);
+    }
 
     const signer = await getDefaultEthersSigner();
     console.log(signer, "signer -----");
 
-    const { tokenDecimals, tokenSymbol } = await getTokenData();
+    const { tokenContract, tokenDecimals, tokenSymbol } = await getTokenData();
     console.log(tokenDecimals, tokenSymbol, "tokenDecimals, tokenSymbol");
 
-    // Get Token Treat Contract
     // @ts-nocheck
     const engagerContract = new ethers.Contract(
       tokenEngagrContractAddress,
@@ -164,11 +165,34 @@ const CreateAds: React.FC = () => {
     );
 
 
-    // Convert Treat amount in decimals
-    const treatAmountInUnits = ethers.parseUnits(dailyBudget, tokenDecimals);
-    console.log(treatAmountInUnits, 'treatAmountInUnits -----')
+    // Convert budget amount in decimals
+    const budgetAmountInUnits = ethers.parseUnits(dailyBudget, tokenDecimals);
+    console.log(budgetAmountInUnits, 'budgetAmountInUnits -----')
 
-    alert("Campaign successfully created!");
+    if(tokenContract) {
+      const currentAllowance = await tokenContract.allowance(address, engagerContract.address);  
+      if (currentAllowance < budgetAmountInUnits) {
+        const tx = await tokenContract.approve(engagerContract.address, budgetAmountInUnits);
+        await tx.wait();
+      }
+    }
+
+    try {
+      const tx = await engagerContract.registerAd(
+        response.data.ad._id,
+        response.data.ad.description,
+        response.data.ad.amountAllocated,
+        response.data.ad.tokenAddress,
+        response.data.ad.endTimestamp,
+        response.data.ad.requiredFollowers
+      )
+      console.log(tx)
+      await tx.wait();
+      alert("Campaign successfully created!");
+    } catch (error) {
+      console.log(error);
+      alert("Tx Error creating campaign");
+    }
   };
 
   return (
