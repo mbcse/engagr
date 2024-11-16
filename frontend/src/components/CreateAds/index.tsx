@@ -18,7 +18,7 @@ const CreateAds: React.FC = () => {
   const [adText, setAdText] = useState<string>("");
   const [websiteDetails, setWebsiteDetails] = useState<string>("");
   const [media, setMedia] = useState<string | null>(null); // Uploaded media
-  const [mediaFile, setMediaFile] = useState<File | null>(null); // Uploaded media
+  const [mediaFile, setMediaFile] = useState<FileList | null>(null); // Uploaded media
 
   // States for delivery customization
   const [dailyBudget, setDailyBudget] = useState<string>("50.00");
@@ -49,7 +49,7 @@ const CreateAds: React.FC = () => {
   const { chainId, address } = useAccount();
 
   const handleFinish = async () => {
-    console.log("Campaign successfully created!");
+    console.log("Campaign successfully created!", mediaFile);
 
     let ImageHash = await uploadFile(mediaFile);
     const LightHouseGateway = "https://gateway.lighthouse.storage/";
