@@ -25,12 +25,7 @@ const marketersSchema = new Schema({
 
   accountAddres: String
 
-}, {
-  timestamps: {
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
-  }
-})
+}, { timestamps: true })
 
 const model = mongoose.model('marketers', marketersSchema)
 export default model

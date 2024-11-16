@@ -5,6 +5,39 @@ import { getUserInfoByUsername } from '../twitter/helpers'
 
 import Ad from '../../database/ads.js'
 
+setInterval(() => {
+  console.log('Running every 3 minutes')
+
+  // Fetch all active ads
+  Ad.find({ endtimestamp: { $gte: Math.floor(Date.now() / 1000) } }, async (err, ads) => {
+    if (err) {
+      console.error('Error fetching ads:', err)
+      return
+    }
+
+    // Loop through each ad
+    for (const ad of ads) {
+      // Fetch all promoters with followers greater than or equal to the required followers
+      const promoters = await Promoter.find({ followers: { $gte: ad.requiredFollowers } })
+
+      // Loop through each promoter
+      for (const promoter of promoters) {
+        // Check if the promoter has already promoted the ad
+        const existingPromotion = await PromotedAd.findOne({ ad: ad._id, promoter: promoter._id })
+
+        if (!existingPromotion) {
+          // If the promoter has not promoted the ad, create a new promotion
+          const newPromotion = new PromotedAd({ ad: ad._id, promoter: promoter._id })
+          await newPromotion.save()
+
+          // Notify the promoter about the new promotion
+          console.log(`Promotion created for promoter ${promoter._id} for ad ${ad._id}`)
+        }
+      }
+    }
+  })
+}, 180000)
+
 export const getOrRegisterMarketer = async (req, res) => {
   try {
     const { accountAddress, email } = req.body
