@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { ContainerScroll } from "../ui/container-scroll-animation";
+import Image from "next/image";
 
 export function HeroScrollDemo() {
   return (
@@ -10,10 +11,15 @@ export function HeroScrollDemo() {
           <>
             <h1 className="text-4xl font-semibold text-white pb-6">
               Unleash the power of <br />
-              <span className="text-4xl md:text-[6rem] font-bold mb-1 leading-none">
-                ADs Platform
-              </span>
             </h1>
+            <div className="flex justify-center items-center pb-8 w-full">
+              <Image
+                src="/light_engagr_transparent.png"
+                alt="EngagR Logo"
+                width={600}
+                height={200}
+              />
+            </div>
           </>
         }
       >

@@ -50,7 +50,7 @@ const DynamicContent: React.FC<DynamicContentProps> = ({ activeContent, role }) 
 
   // Determine which content to render based on the role
   return (
-    <div className="p-4 bg-slate-950 rounded-lg shadow">
+    <div className="">
       {role === "admin" ? renderAdminContent() : renderPromoterContent()}
     </div>
   );

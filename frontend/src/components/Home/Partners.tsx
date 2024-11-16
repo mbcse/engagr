@@ -5,7 +5,7 @@ import { InfiniteMovingCards } from "../ui/infinite-moving-cards.tsx";
 export function Partners() {
   return (
     <div className="h-[20rem] rounded-md flex flex-col antialiaseddark:bg-grid-white/[0.05] items-center justify-center overflow-hidden">
-      <p className="text-neutral-500 text-center text-xl font-medium mb-4">
+      <p className="text-neutral-300 text-center text-xl font-medium mb-4">
         Trusted by big industries
       </p>
       <InfiniteMovingCards

@@ -1,6 +1,7 @@
 "use client";
 
 import { LayoutDashboard, Users, FileText, Settings, BarChart, Layers } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 type SidebarProps = {
@@ -32,12 +33,12 @@ const Sidebar: React.FC<SidebarProps> = ({ open, setOpen, setActiveContent, role
     <div
       className={`${
         open ? "w-64" : "w-20"
-      } flex flex-col h-screen p-3 bg-slate-950 shadow duration-300`}
+      } flex flex-col h-screen p-3 bg-slate-900 border-r border-gray-600 shadow duration-300`}
     >
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
+        <div className={`flex items-center  ${open && "justify-between"}`}>
           <Link href="/">
-            <h2 className={`text-xl font-bold text-white ${!open && "hidden"}`}>Logo</h2>
+            <Image src="/light_engagr_transparent.png" alt="logo" width={100} height={100} className={`ml-0 ${!open && "hidden"}`} />
           </Link>
           <button onClick={() => setOpen(!open)} className="p-2">
             <svg

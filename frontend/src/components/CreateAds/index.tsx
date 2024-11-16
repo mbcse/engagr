@@ -6,9 +6,10 @@ import ObjectiveSection from "./ObjectiveSection";
 import CreateAd from "./CreateAd";
 import CustomizeDelivery from "./CustomizeDelivery";
 
-import { uploadFile, uploadJson } from "@/utils/ipfsHelper";
+import { uploadFile } from "@/utils/ipfsHelper";
 import { useAccount } from "wagmi";
 import axios from "axios";
+import { type MarketingGoal } from "./AllocateBudget";
 
 const CreateAds: React.FC = () => {
   // States for objectives
@@ -16,12 +17,19 @@ const CreateAds: React.FC = () => {
 
   // States for ad creation
   const [adText, setAdText] = useState<string>("");
-  const [websiteDetails, setWebsiteDetails] = useState<string>("");
+  const [attestedLinks, setAttestedLinks] = useState<string>("");
   const [media, setMedia] = useState<string | null>(null); // Uploaded media
   const [mediaFile, setMediaFile] = useState<FileList | null>(null); // Uploaded media
 
   // States for delivery customization
   const [dailyBudget, setDailyBudget] = useState<string>("50.00");
+
+  // Define marketing goals
+  const initialGoals: MarketingGoal[] = [
+    { goal: "Reach", percentage: 30 },
+    { goal: "Clicks", percentage: 40 },
+    { goal: "Comments", percentage: 30 },
+  ];
 
   // Updated: Changed dateRange to use Date[]
   const [dateRange, setDateRange] = useState<Date[]>([
@@ -30,6 +38,10 @@ const CreateAds: React.FC = () => {
   ]);
 
   const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
+
+  const [marketingGoals, setMarketingGoals] = useState<MarketingGoal[]>(initialGoals);
+  const [followerRange, setFollowerRange] = useState(0);
+  const [durationMinutes, setDurationMinutes] = useState<number>(0)
 
   // Tab navigation
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -71,15 +83,17 @@ const CreateAds: React.FC = () => {
       requiredFollowers: 10,
       marketer: localStorage.getItem("user")?.trim(),
       objective: selectedObjective,
+      followerRange, 
+      durationMinutes
     };
 
     console.log(payload, "payload ----");
-    try {
-      const response = await axios.post("http://localhost:3002/engagr/register-ad", payload);
-      console.log(response, "response from server");
-    } catch (error: any) {
-      console.error("Error:", error.message);
-    }
+    // try {
+    //   const response = await axios.post("http://localhost:3002/engagr/register-ad", payload);
+    //   console.log(response, "response from server");
+    // } catch (error: any) {
+    //   console.error("Error:", error.message);
+    // }
 
     alert("Campaign successfully created!");
   };
@@ -87,7 +101,7 @@ const CreateAds: React.FC = () => {
   return (
     <Box p={8} maxWidth="1200px" mx="auto" className="h-[90vh]">
       <Tabs index={activeTab} onChange={(index) => setActiveTab(index)} isFitted>
-        <TabList mb={4}>
+        <TabList mb={4} className="text-white">
           <Tab>Choose Objective</Tab>
           <Tab isDisabled={!selectedObjective}>Create Ad</Tab>
           <Tab isDisabled={!selectedObjective}>Customize Delivery</Tab>
@@ -115,8 +129,8 @@ const CreateAds: React.FC = () => {
             <CreateAd
               adText={adText}
               setAdText={setAdText}
-              websiteDetails={websiteDetails}
-              setWebsiteDetails={setWebsiteDetails}
+              websiteDetails={attestedLinks}
+              setWebsiteDetails={setAttestedLinks}
               media={media}
               setMedia={setMedia}
               handlePrevious={handlePrevious}
@@ -130,12 +144,16 @@ const CreateAds: React.FC = () => {
             <CustomizeDelivery
               dailyBudget={dailyBudget}
               setDailyBudget={setDailyBudget}
-              dateRange={dateRange}
-              setDateRange={setDateRange}
+              durationMinutes={durationMinutes}
+              setDurationMinutes={setDurationMinutes}
               paymentMethod={paymentMethod}
               setPaymentMethod={setPaymentMethod}
               handlePrevious={handlePrevious}
               handleFinish={handleFinish}
+              marketingGoals={marketingGoals}
+              setMarketingGoals={setMarketingGoals}
+              followerRange={followerRange}
+              setFollowerRange={setFollowerRange}
             />
           </TabPanel>
         </TabPanels>

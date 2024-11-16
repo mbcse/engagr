@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   Box,
   VStack,
@@ -25,8 +25,7 @@ interface CreateAdProps {
   setMedia: (media: string | null) => void;
   handlePrevious: () => void;
   handleNext: () => void;
-  mediaFile : FileList | null,
-  setMediaFile : (media: File | null) => void;
+  setMediaFile: (media: FileList | null) => void;
 }
 
 const CreateAd: React.FC<CreateAdProps> = ({
@@ -38,7 +37,7 @@ const CreateAd: React.FC<CreateAdProps> = ({
   setMedia,
   handlePrevious,
   handleNext,
-  setMediaFile
+  setMediaFile,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -58,12 +57,24 @@ const CreateAd: React.FC<CreateAdProps> = ({
     fileInputRef.current?.click();
   };
 
+  const [attestedLink, setAttestedLink] = useState(false);
+
+  console.log(attestedLink, "attestedLink");
+  const getAttestedLink = () => {
+    try {
+      setAdText(adText + " " + `\n\ http://localhost:3000/promoter`);
+      setAttestedLink(true);
+    } catch (error) {
+      setAttestedLink(false);
+    }
+  };
+
   return (
-    <HStack alignItems="flex-start" spacing={8} className="">
+    <HStack alignItems="flex-start" spacing={8} className="text-white">
       {/* Left Section: Ad Creation Form */}
       <VStack align="stretch" flex="1">
         <Text fontSize="2xl" fontWeight="bold" mb={4}>
-          Create a website traffic ad
+          Create a an Ad
         </Text>
         <FormControl>
           <FormLabel>Ad text (required)</FormLabel>
@@ -76,17 +87,13 @@ const CreateAd: React.FC<CreateAdProps> = ({
         </FormControl>
 
         <FormControl mt={4}>
-          <FormLabel>Website details (required)</FormLabel>
-          <Input
-            placeholder="Enter website URL"
-            value={websiteDetails}
-            onChange={(e) => setWebsiteDetails(e.target.value)}
-          />
-        </FormControl>
-
-        <FormControl mt={4}>
           <FormLabel>Add media</FormLabel>
-          <Button leftIcon={<AddIcon />} onClick={handleUploadClick} colorScheme="blue" variant="solid">
+          <Button
+            leftIcon={<AddIcon />}
+            onClick={handleUploadClick}
+            colorScheme="blue"
+            variant="solid"
+          >
             Upload Image
           </Button>
           <Input
@@ -99,14 +106,20 @@ const CreateAd: React.FC<CreateAdProps> = ({
         </FormControl>
 
         <Text mt={4} fontSize="sm" color="gray.500">
-          NOTE: Launching this ad will create a promoted-only Tweet.
+          NOTE: Launching this ad will create a Tweet/Comment.
         </Text>
 
         <HStack justifyContent="space-between" w="100%" mt={8}>
           <Button onClick={handlePrevious}>Back</Button>
-          <Button colorScheme="blue" onClick={handleNext}>
-            Next
-          </Button>
+          {attestedLink ? (
+            <Button colorScheme="blue" onClick={handleNext}>
+              Next
+            </Button>
+          ) : (
+            <Button colorScheme="blue" onClick={getAttestedLink}>
+              Get Attested Link
+            </Button>
+          )}
         </HStack>
       </VStack>
 
@@ -138,9 +151,6 @@ const CreateAd: React.FC<CreateAdProps> = ({
             </Text>
           )}
           {media && <Image src={media} alt="Uploaded Media" borderRadius="md" mt={4} />}
-          <Text mt={4} fontSize="sm" color="gray.500">
-            Promoted
-          </Text>
         </Box>
       </Box>
     </HStack>

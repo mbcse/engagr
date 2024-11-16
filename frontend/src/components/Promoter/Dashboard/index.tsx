@@ -57,8 +57,8 @@ const fetchUser = async (twitter: string, address: string) => {
       return;
     }
     const response = await axios.post("http://localhost:3002/engagr/get-register-promoter", {
-      twitterUsername : twitter,
-      accountAddress : address,
+      twitterUsername: twitter,
+      accountAddress: address,
     });
     console.log(response, "response");
   } catch (error: any) {
@@ -124,9 +124,9 @@ const Dashboard = () => {
   };
 
   // Colors for dark/light mode
-  const bg = useColorModeValue("gray.100", "gray.900");
-  const cardBg = useColorModeValue("white", "gray.800");
-  const textColor = useColorModeValue("gray.800", "white");
+  const bg = "gray.900";
+  const cardBg = "gray.800";
+  const textColor = "white";
 
   const chartContainerStyle = {
     p: "0.5rem",
@@ -138,7 +138,7 @@ const Dashboard = () => {
   };
 
   const { user } = useDynamicContext();
-  const account = useAccount()
+  const account = useAccount();
 
   useEffect(() => {
     // const email = user?.email;
@@ -149,13 +149,14 @@ const Dashboard = () => {
 
     if (twitter && address) {
       console.log("fetching user...");
-      fetchUser(twitter, address);
+      // fetchUser(twitter, address);
     }
   }, [user]);
 
+
   return (
-    <Box p={8} bg={bg}>
-      {!user ? (
+    <Box p={8}>
+      {false ? (
         <div className="flex justify-center items-center h-[80vh]">
           <DynamicWidget variant="dropdown" innerButtonComponent="Login" />
         </div>
