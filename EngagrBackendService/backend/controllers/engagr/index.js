@@ -116,6 +116,8 @@ export const publishAd = async (req, res) => {
       marketer
     } = req.body
 
+    console.log(req.body, 'req.body')
+
     // Input Validation
     if (!adDescription || !amountAllocated || !chainId || !endtimestamp || !media || !requiredFollowers || !marketer) {
       return res.status(400).json({ error: 'All fields are required.' })
