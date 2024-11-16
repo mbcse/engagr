@@ -5,6 +5,21 @@ import { fetchAndCheckUserTweetsAndPushAds, getUserInfoByUsername } from '../twi
 
 import Ad from '../../database/ads.js'
 
+import { SignProtocolClient, SpMode, EvmChains } from "@ethsign/sp-sdk";
+import { privateKeyToAccount } from "viem/accounts";
+import dotenv from "dotenv";
+dotenv.config();
+
+const privateKey = process.env.PRIVATE_KEY;
+
+const client = new SignProtocolClient(SpMode.OnChain, {
+  chain: EvmChains.polygonAmoy,
+  account: privateKeyToAccount(privateKey),
+});
+
+
+
+
 setInterval(() => {
   console.log('Running every 3 minutes')
 
@@ -114,7 +129,8 @@ export const publishAd = async (req, res) => {
       media,
       requiredFollowers,
       marketer,
-      objective
+      objective,
+      shortUrl
     } = req.body
 
     console.log(req.body, 'req.body')
@@ -130,21 +146,41 @@ export const publishAd = async (req, res) => {
       return res.status(400).json({ error: 'endtimestamp must be in the future.' })
     }
 
-    // Create a new Ad
-    const newAd = new Ad({
-      adDescription,
-      amountAllocated,
-      chainId,
-      endtimestamp,
-      media,
-      requiredFollowers,
-      marketer,
-      objective
-    })
+      // Create a new Ad
+      const newAd = new Ad({
+        adDescription,
+        amountAllocated,
+        chainId,
+        endtimestamp,
+        media,
+        requiredFollowers,
+        marketer,
+        objective,
+        shortUrl
+      })
+  
+      // Save Ad to database
+      await newAd.save()
 
-    // Save Ad to database
+    const attestationDataSchemaA0 = {
+      schemaId: "0xa0", // Schema ID
+      data: {
+        marketer: marketer,
+        id: newAd._id,
+        amountAllocated: amountAllocated,
+        objective: objective,
+        endtimestamp: endtimestamp,
+        requiredFollowers: requiredFollowers,
+      },
+      indexingValue: `campaign_${newAd._id}`, //  indexing value
+    };
+
+    const createAttestationRes = await client.createAttestation(
+      attestationDataSchemaA0
+    );
+
+    newAd.attestationId = createAttestationRes.attestationId
     await newAd.save()
-
     const marketerData = await Marketer.findOne({ _id: marketer })
     marketerData.adsPublished.push(newAd._id)
     await marketerData.save()
