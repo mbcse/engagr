@@ -77,6 +77,7 @@ export const getOrRegisterMarketer = async (req, res) => {
     const contract = new ethers.Contract(ENGAGR_CONTRACT_ADDRESS[80002], ENGAGR_ABI, wallet);
     const tx = await contract.registerMarketer(marketer._id, accountAddress, email);
     await tx.wait();
+    
     // Return the new marketer's ID
     return res.status(201).json({ userId: marketer._id })
   } catch (error) {
