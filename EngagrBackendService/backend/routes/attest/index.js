@@ -11,11 +11,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const router = express.Router()
-<<<<<<< Updated upstream
-=======
 
 const { nanoid } = require('nanoid')
->>>>>>> Stashed changes
 
 const privateKey = process.env.PRIVATE_KEY;
 
