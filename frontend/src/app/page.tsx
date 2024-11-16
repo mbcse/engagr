@@ -22,9 +22,9 @@ export default function Home() {
 
       <FloatingNav />
 
-      <HeroScrollDemo />
+      {/* <HeroScrollDemo />
       <Partners />
-      <WobbleCardDemo />
+      <WobbleCardDemo /> */}
     </Flex>
   );
 }
