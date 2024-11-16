@@ -8,12 +8,7 @@ const registerMentionsSchema = new Schema({
   userId: String,
   text: String,
   timestamp: Date
-}, {
-  timestamps: {
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
-  }
-})
+}, { timestamps: true })
 
 const model = mongoose.model('registerMentions', registerMentionsSchema)
 export default model

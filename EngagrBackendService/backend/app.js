@@ -16,7 +16,7 @@ import logger from './utilities/logger.js'
 import routes from './routes'
 import rateLimiter from './middleware/rateLimiter.js'
 import Moralis from 'moralis'
-// import './database'
+import './database'
 
 const app = express()
 
