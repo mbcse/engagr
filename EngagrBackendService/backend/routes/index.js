@@ -14,6 +14,6 @@ router.get('/hello', (req, res) => {
   res.send('Welcome to Backend!')
 })
 
-router.get('/engagr', engagrRoute)
+router.use('/engagr', engagrRoute)
 
 export default router
