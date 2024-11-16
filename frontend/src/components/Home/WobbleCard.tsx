@@ -11,15 +11,18 @@ export function WobbleCardDemo() {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-7xl mx-auto w-full p-8 lg:p-0 ">
       <WobbleCard containerClassName="col-span-1 lg:col-span-3  ">
         <div className="w-[90%] m-auto flex justify-between items-center">
-          <div className="flex flex-col w-3/5">
-            <h2 className="text-white text-xl text-center md:text-left md:text-3xl font-bold mx-auto md:mx-0 max-w-xl">
+          <div className="flex justify-between w-full ">
+           <div>
+           <h2 className="text-white text-xl text-center md:text-left md:text-3xl font-bold mx-auto md:mx-0 max-w-xl">
               Get started today with <span className="text-slate-900">EngagR</span> to kickstart your marketing efforts
             </h2>
             <p className="max-w-md mt-8 text-center md:text-left text-sm md:text-base mx-auto md:mx-0 text-neutral-400">
             <span className="text-slate-900">EngagR</span> houses the best-in-class software tools to kickstart your marketing journey.
               Join 127,000+ other users to get started.
             </p>
-            <div className="flex flex-col items-center mt-10 mb-10 md:items-start">
+           </div>
+          <div>
+          <div className="flex flex-col items-center mt-10 mb-10 md:items-start">
               <div className="flex flex-col sm:flex-row mb-2 lg:justify-start justify-start items-center">
                 {/* Profile Images */}
                 {[
@@ -112,7 +115,8 @@ export function WobbleCardDemo() {
               </svg>
             </button>
           </div>
-          <div className="w-2/5">
+          </div>
+          <div className="w-2/5 hidden">
             <footer className=" text-sm w-full">
               <div className="w-[90%] mx-auto flex flex-col">
                 <div className="">
@@ -168,7 +172,7 @@ export function WobbleCardDemo() {
         <div className="w-[90%] m-auto bg-gray-800 h-px relative top-16" />
 
         <div className="w-[90%] m-auto py-5 flex flex-col md:flex-row lg:flex-row justify-between items-center text-white font-medium relative top-16">
-          <p>© ETH Bangkok {year} - ADs. All Rights Reserved.</p>
+          <p>© ETH Bangkok {year} - EngagR. All Rights Reserved.</p>
           <p>
             Made with ❤️ by{" "}
             <Link

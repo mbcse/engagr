@@ -39,7 +39,7 @@ const generateDummyData = (count: number) => {
 const campaigns = generateDummyData(50);
 
 const CampaignHistoryTable = () => {
-  const hoverBg = useColorModeValue("gray.100", "gray.700");
+  const hoverBg = "gray.700";
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,7 +68,7 @@ const CampaignHistoryTable = () => {
 
   return (
     <Box p={8} maxWidth="1200px" mx="auto" height="90vh">
-      <Text fontSize="2xl" mb={6} fontWeight="bold">
+      <Text fontSize="2xl" mb={6} fontWeight="bold" className="text-gray-300">
         Campaign History
       </Text>
       <TableContainer
@@ -76,13 +76,14 @@ const CampaignHistoryTable = () => {
         borderColor="gray.200"
         borderRadius="md"
         overflowY="auto"
+        className="text-gray-300"
       >
         <Table variant="simple">
-          <Thead>
+          <Thead className="text-gray-300">
             <Tr>
-              <Th>Campaign Name</Th>
+              <Th>Campaign ID</Th>
               <Th>Target Audience</Th>
-              <Th>Payout Information</Th>
+              <Th>Amount</Th>
               <Th>Start Date</Th>
               <Th>End Date</Th>
             </Tr>
@@ -106,7 +107,7 @@ const CampaignHistoryTable = () => {
       </TableContainer>
 
       {/* Pagination Controls */}
-      <HStack justifyContent="center" spacing={4} mt={4}>
+      <HStack justifyContent="center" spacing={4} mt={4} className="text-gray-300">
         <Button onClick={handlePreviousPage} isDisabled={currentPage === 1} colorScheme="blue">
           Previous
         </Button>

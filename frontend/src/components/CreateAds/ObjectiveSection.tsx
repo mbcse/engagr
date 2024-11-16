@@ -45,7 +45,7 @@ const ObjectiveSection: React.FC<ObjectiveSectionProps> = ({
   ];
 
   return (
-    <Box textAlign="center" py={10} px={4}>
+    <Box textAlign="center" py={10} px={4} className="text-white">
       <Heading as="h2" size="xl" mb={8}>
         What's Your Objective?
       </Heading>

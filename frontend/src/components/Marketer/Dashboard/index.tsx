@@ -4,6 +4,7 @@ import axios from "axios";
 import { Box } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useAccount } from "wagmi";
+import AdStatsDashboard from "./AdStatsDashboard";
 
 const fetchUser = async (accountAddress: string, email: string) => {
   try {
@@ -27,8 +28,6 @@ const MarketDashboard = () => {
   const { user } = useDynamicContext();
   const account = useAccount();
 
-  const bg = useColorModeValue("gray.100", "gray.900");
-
   useEffect(() => {
     const email = user?.email;
     const address = account?.address;
@@ -39,15 +38,24 @@ const MarketDashboard = () => {
     }
   }, [user]);
 
+
   return (
-    <Box p={8} bg={bg}>
+    <Box p={8}>
       {user ? (
         <div>
           <div className="flex justify-end items-end pb-4 w-full">
             <div className="w-60"></div>
             <DynamicWidget variant="dropdown" innerButtonComponent="Login" />
           </div>
-          <div>MarketDashboard</div>
+          <div>
+            {" "}
+            <AdStatsDashboard
+              views={12345}
+              likes={6789}
+              shares={2345}
+              engagements={4567}
+            />
+          </div>
         </div>
       ) : (
         <div className="flex justify-center items-center h-[80vh]">
