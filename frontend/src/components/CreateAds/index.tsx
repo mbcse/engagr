@@ -22,7 +22,7 @@ const CreateAds: React.FC = () => {
 
   // States for ad creation
   const [adText, setAdText] = useState<string>("");
-  const [attestedLinks, setAttestedLinks] = useState<string>("");
+  const [websiteDetails, setWebsiteDetails] = useState<string>("");
   const [media, setMedia] = useState<string | null>(null); // Uploaded media
   const [mediaFile, setMediaFile] = useState<FileList | null>(null); // Uploaded media
 
@@ -113,7 +113,10 @@ const CreateAds: React.FC = () => {
 
   const { address } = useAccount();
 
+  const [loading, setLoading] = useState(false)
+
   const handleFinish = async () => {
+    setLoading(true)
     console.log("Campaign successfully created!", mediaFile);
 
     let ImageHash = await uploadFile(mediaFile);
@@ -138,12 +141,12 @@ const CreateAds: React.FC = () => {
       objective: selectedObjective,
       // followerRange,
       // durationMinutes,
-      shortUrl : attestedLinks
+      shortUrl : attestedLink
     };
 
     // transactions
 
-    console.log(payload, "payload ----");
+    console.log(payload, "payload ----", loading);
     let response;
     try {
       response = await axios.post(
@@ -202,7 +205,10 @@ const CreateAds: React.FC = () => {
     } catch (error) {
       console.log(error);
       alert("Tx Error creating campaign");
+    } finally {
+      setLoading(false)
     }
+    
   };
 
   return (
@@ -236,14 +242,15 @@ const CreateAds: React.FC = () => {
             <CreateAd
               adText={adText}
               setAdText={setAdText}
-              websiteDetails={attestedLinks}
-              setWebsiteDetails={setAttestedLinks}
+              websiteDetails={websiteDetails}
+              setWebsiteDetails={setWebsiteDetails}
               media={media}
               setMedia={setMedia}
               handlePrevious={handlePrevious}
               handleNext={handleNext}
               setMediaFile={setMediaFile}
-              attestedLink={attestedLink} setAttestedLink={setAttestedLink}
+              attestedLink={attestedLink} 
+              setAttestedLink={setAttestedLink}
             />
           </TabPanel>
 
@@ -265,6 +272,7 @@ const CreateAds: React.FC = () => {
               selectedToken={selectedToken}
               setSelectedToken={setSelectedToken}
               tokenList={tokenList}
+              loading={loading}
             />
           </TabPanel>
         </TabPanels>
