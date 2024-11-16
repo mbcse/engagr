@@ -159,7 +159,7 @@ const CreateAds: React.FC = () => {
       signer,
     );
     
-    console.log(_engagerContract, '_engagerContract -----');
+    console.log(engagerContract, '_engagerContract -----');
 
     // Convert budget amount in decimals
     const budgetAmountInUnits = ethers.parseUnits(dailyBudget, tokenDecimals);
