@@ -77,7 +77,7 @@ export const getOrRegisterMarketer = async (req, res) => {
     const contract = new ethers.Contract(ENGAGR_CONTRACT_ADDRESS[80002], ENGAGR_ABI, wallet);
     const tx = await contract.registerMarketer(marketer._id, accountAddress, email);
     await tx.wait();
-    
+
     // Return the new marketer's ID
     return res.status(201).json({ userId: marketer._id })
   } catch (error) {
@@ -156,7 +156,7 @@ export const publishAd = async (req, res) => {
     }
 
       // Create a new Ad
-      const newAd = new Ad({
+      let newAd = new Ad({
         adDescription,
         amountAllocated,
         chainId,
@@ -169,7 +169,7 @@ export const publishAd = async (req, res) => {
       })
   
       // Save Ad to database
-      await newAd.save()
+      newAd = await newAd.save()
 
     const attestationDataSchemaA0 = {
       schemaId: "0xa0", // Schema ID
@@ -187,6 +187,7 @@ export const publishAd = async (req, res) => {
     const createAttestationRes = await client.createAttestation(
       attestationDataSchemaA0
     );
+    console.log("Attestation created:", createAttestationRes)
 
     newAd.attestationId = createAttestationRes.attestationId
     await newAd.save()
