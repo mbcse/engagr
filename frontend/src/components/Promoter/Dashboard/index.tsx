@@ -14,10 +14,8 @@ import {
   HStack,
   Center,
   Spacer,
-  VStack,
   Icon,
   Flex,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { FiUsers, FiBarChart2, FiDollarSign, FiPieChart } from "react-icons/fi";
 import { Line, Doughnut } from "react-chartjs-2";
@@ -55,10 +53,13 @@ const fetchUser = async (twitter: string, address: string) => {
       console.error("Twitter and address are required.");
       return;
     }
-    const response = await axios.post("http://localhost:3002/engagr/get-register-promoter", {
-      twitterUsername: twitter,
-      accountAddress: address,
-    });
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_DEPLOYED_URL}/engagr/get-register-promoter`,
+      {
+        twitterUsername: twitter,
+        accountAddress: address,
+      },
+    );
     console.log(response, "response");
   } catch (error: any) {
     console.error("Error:", error.message);
@@ -144,7 +145,7 @@ const Dashboard = () => {
 
     if (twitter && address) {
       console.log("fetching user...");
-      // fetchUser(twitter, address);
+      fetchUser(twitter, address);
     }
   }, [user]);
 
@@ -154,9 +155,8 @@ const Dashboard = () => {
     </div>
   ) : (
     <>
-     
       <Box p={8} bg={bg} minHeight="100vh">
-         {/* <div className="flex justify-end items-end pb-4 w-full">
+        {/* <div className="flex justify-end items-end pb-4 w-full">
         <div className="w-60"></div>
         <DynamicWidget variant="dropdown" innerButtonComponent="Login" />
       </div> */}

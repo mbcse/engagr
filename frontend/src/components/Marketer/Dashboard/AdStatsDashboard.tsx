@@ -1,11 +1,8 @@
 import React from "react";
 import {
   Box,
-  Flex,
   Grid,
-  GridItem,
   VStack,
-  Text,
   Stat,
   StatLabel,
   StatNumber,

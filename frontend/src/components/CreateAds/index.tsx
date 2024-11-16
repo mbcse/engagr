@@ -7,7 +7,7 @@ import CreateAd from "./CreateAd";
 import CustomizeDelivery from "./CustomizeDelivery";
 
 import { uploadFile } from "@/utils/ipfsHelper";
-import { useAccount, useChainId } from "wagmi";
+import { useChainId } from "wagmi";
 import { type MarketingGoal } from "./AllocateBudget";
 import { getDefaultEthersSigner } from "@/utils/clientToEtherjsSigner";
 import { ERC20ABI, TOKEN_ENGAGR_ABI, TOKEN_ENGAGR_CONTRACT_ADDRESS } from "@/config";
@@ -35,10 +35,6 @@ const CreateAds: React.FC = () => {
   ];
 
   // Updated: Changed dateRange to use Date[]
-  const [dateRange, setDateRange] = useState<Date[]>([
-    new Date(),
-    new Date(new Date().setDate(new Date().getDate() + 7)), // Default to a week from now
-  ]);
 
   const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
 
@@ -61,7 +57,6 @@ const CreateAds: React.FC = () => {
     }
   };
 
-  const { address } = useAccount();
   const chainId = useChainId();
   const tokenEngagrContractAddress = TOKEN_ENGAGR_CONTRACT_ADDRESS[chainId];
 
@@ -163,7 +158,8 @@ const CreateAds: React.FC = () => {
       TOKEN_ENGAGR_ABI,
       signer,
     );
-
+    
+    console.log(_engagerContract, '_engagerContract -----');
 
     // Convert budget amount in decimals
     const budgetAmountInUnits = ethers.parseUnits(dailyBudget, tokenDecimals);
