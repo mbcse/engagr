@@ -8,15 +8,15 @@ export function WobbleCardDemo() {
   const year = new Date().getFullYear();
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-7xl mx-auto w-full p-8 lg:p-0 pb-40">
-      <WobbleCard containerClassName="col-span-1 lg:col-span-3 bg-[#43288A] ">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-7xl mx-auto w-full p-8 lg:p-0 ">
+      <WobbleCard containerClassName="col-span-1 lg:col-span-3  ">
         <div className="w-[90%] m-auto flex justify-between items-center">
           <div className="flex flex-col w-3/5">
             <h2 className="text-white text-xl text-center md:text-left md:text-3xl font-bold mx-auto md:mx-0 max-w-xl">
-              Get started today with Proactiv to kickstart your marketing efforts
+              Get started today with <span className="text-slate-900">EngagR</span> to kickstart your marketing efforts
             </h2>
             <p className="max-w-md mt-8 text-center md:text-left text-sm md:text-base mx-auto md:mx-0 text-neutral-400">
-              Proactiv houses the best-in-class software tools to kickstart your marketing journey.
+            <span className="text-slate-900">EngagR</span> houses the best-in-class software tools to kickstart your marketing journey.
               Join 127,000+ other users to get started.
             </p>
             <div className="flex flex-col items-center mt-10 mb-10 md:items-start">

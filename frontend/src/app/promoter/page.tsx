@@ -1,13 +1,7 @@
 import React from "react";
 
 const Promoter = () => {
-  return (
-    <>
-    
-
-
-    </>
-  );
+  return <></>;
 };
 
 export default Promoter;

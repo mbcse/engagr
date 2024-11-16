@@ -15,7 +15,7 @@ const ThemeContext = createContext<ThemeContextProps>({
 const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [theme, setTheme] = useState<keyof typeof Theme>("Neon_Style");
+  const [theme, setTheme] = useState<keyof typeof Theme>("");
 
   function toggleTheme() {
     const newTheme: keyof typeof Theme =
