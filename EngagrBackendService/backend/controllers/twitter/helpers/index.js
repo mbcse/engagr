@@ -97,14 +97,33 @@ export const listenToUserTweets = async () => {
 export const getTweetStats = async (tweetId) => {
   try {
     const tweet = await twitterClient.v2.singleTweet(tweetId, {
-      'tweet.fields': ['public_metrics']
+      'tweet.fields': ['public_metrics', 'created_at']
     })
-    console.log('Tweet Stats:', tweet.data.public_metrics)
+    console.log('Tweet Stats:', tweet)
     return tweet.data.public_metrics
   } catch (error) {
     console.error('Error fetching tweet stats:', error)
   }
 }
+
+/*
+Tweet Stats: {
+  data: {
+    edit_history_tweet_ids: [ '1857320049914294535' ],
+    public_metrics: {
+      retweet_count: 1,
+      reply_count: 1,
+      like_count: 5,
+      quote_count: 0,
+      bookmark_count: 0,
+      impression_count: 130
+    },
+    text: '@cartesiproject \nName : cartien https://t.co/2P8tboIIOr',
+    id: '1857320049914294535',
+    created_at: '2024-11-15T07:09:41.000Z'
+  }
+}
+*/
 
 // Example: Reply to a tweet
 // await replyToTweet('1852474064809369829', 'Hello from Twitter API v2!')
@@ -157,9 +176,20 @@ const downloadImageFromIPFS = async (ipfsLink, localPath) => {
 
 export const fetchAndCheckUserTweetsAndPushAds = async (twitterId, addDescription, imageIpfsLink, adId) => {
   try {
+    const ad = await Ad.findOne({ _id: adId })
     const tweets = await twitterClient.v2.userTimeline(twitterId, { max_results: 5 })
     console.log(tweets)
-    for (const tweet of tweets._realData.data) {
+    for (const tweet of tweets._realData.data.slice(0, 2)) {
+      console.log(tweet)
+      const tweetStats = await getTweetStats(tweet.id)
+      console.log('Tweet Stats:', tweetStats)
+      const unixTimestamp = Math.floor(new Date(tweetStats.created_at).getTime() / 1000);
+
+      if (unixTimestamp < ad.created_at) {
+        console.log('Tweet is older than the campaign start time. Skipping...')
+        continue
+      }
+
       const existingTweet = await ProcessedUserTweetsForAds.findOne({ tweetId: tweet.id })
 
       if (!existingTweet) {
@@ -190,9 +220,9 @@ export const fetchAndCheckUserTweetsAndPushAds = async (twitterId, addDescriptio
           timestamp: new Date()
         })
         await newTweet.save()
-
-        const ad = await Ad.findOne({ _id: adId })
+        
         ad.promoters.push()
+        await ad.save()
       }
     }
   } catch (error) {
@@ -208,3 +238,8 @@ export const fetchAndCheckUserTweetsAndPushAds = async (twitterId, addDescriptio
 
 // getUserInfoByUsername('mbcse50')
 // fetchMentions()
+
+
+// fetchAndCheckUserTweetsAndPushAds('3248868421')
+
+// getTweetStats('1857320049914294535')
