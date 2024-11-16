@@ -12,6 +12,8 @@ const adsSchema = new Schema({
   requiredFollowers: Number,
   marketer: String,
   objective: String,
+  shortUrl: String,
+  attestationId: String,
   promoters: [
     {
       type: mongoose.Schema.Types.ObjectId,
