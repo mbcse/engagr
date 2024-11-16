@@ -7,14 +7,16 @@ import CreateAd from "./CreateAd";
 import CustomizeDelivery from "./CustomizeDelivery";
 
 import { uploadFile } from "@/utils/ipfsHelper";
-import { useChainId } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
 import { type MarketingGoal } from "./AllocateBudget";
 import { getDefaultEthersSigner } from "@/utils/clientToEtherjsSigner";
 import { ERC20ABI, TOKEN_ENGAGR_ABI, TOKEN_ENGAGR_CONTRACT_ADDRESS } from "@/config";
 import { ethers } from "ethers";
+import axios from "axios";
 
 const CreateAds: React.FC = () => {
-  const account = useAccount()
+  // @ts-ignore
+  const account = useAccount();
   // States for objectives
   const [selectedObjective, setSelectedObjective] = useState<string>("");
 
@@ -40,7 +42,7 @@ const CreateAds: React.FC = () => {
 
   const [marketingGoals, setMarketingGoals] = useState<MarketingGoal[]>(initialGoals);
   const [followerRange, setFollowerRange] = useState(0);
-  const [durationMinutes, setDurationMinutes] = useState<number>(0);
+  const [durationMinutes, setDurationMinutes] = useState<string>("");
 
   // Tab navigation
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -85,6 +87,7 @@ const CreateAds: React.FC = () => {
   ];
 
   const [selectedToken, setSelectedToken] = useState<any>(null);
+  const [attestedLink, setAttestedLink] = useState("");
 
   const getTokenData = async () => {
     const signer = await getDefaultEthersSigner();
@@ -108,6 +111,8 @@ const CreateAds: React.FC = () => {
     return { tokenContract, tokenDecimals, tokenSymbol };
   };
 
+  const { address } = useAccount();
+
   const handleFinish = async () => {
     console.log("Campaign successfully created!", mediaFile);
 
@@ -116,7 +121,7 @@ const CreateAds: React.FC = () => {
     ImageHash = ImageHash.replace("://", "/");
     const fullUrl = `${LightHouseGateway}${ImageHash}`;
 
-    console.log(fullUrl, "treatImageHash");
+    console.log(fullUrl, "treatImageHash", Number(durationMinutes), 'Number(durationMinutes)');
 
     const payload = {
       adDescription: adText,
@@ -127,20 +132,24 @@ const CreateAds: React.FC = () => {
       // paymentMethod,
       // mediaFile,
       chainId: chainId,
-      endtimestamp: Math.floor(Date.now() / 1000) + durationMinutes * 60,
-      requiredFollowers: 10,
+      endtimestamp: Math.floor(Date.now() / 1000) + Number(durationMinutes) * 60,
+      requiredFollowers: followerRange,
       marketer: localStorage.getItem("user")?.trim(),
       objective: selectedObjective,
-      followerRange,
-      durationMinutes,
+      // followerRange,
+      // durationMinutes,
+      shortUrl : attestedLinks
     };
 
     // transactions
 
     console.log(payload, "payload ----");
-    let response = null;
+    let response;
     try {
-      response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_DEPLOYED_URL}/engagr/register-ad`, payload);
+      response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_DEPLOYED_URL}/engagr/register-ad`,
+        payload,
+      );
       console.log(response, "response from server");
     } catch (error: any) {
       console.error("Error:", error.message);
@@ -158,15 +167,19 @@ const CreateAds: React.FC = () => {
       TOKEN_ENGAGR_ABI,
       signer,
     );
-    
-    console.log(engagerContract, '_engagerContract -----');
+
+    console.log(engagerContract, "_engagerContract -----");
+
+    console.log(tokenContract, "tokenContract -----");
 
     // Convert budget amount in decimals
     const budgetAmountInUnits = ethers.parseUnits(dailyBudget, tokenDecimals);
-    console.log(budgetAmountInUnits, 'budgetAmountInUnits -----')
+    console.log(budgetAmountInUnits, "budgetAmountInUnits -----");
 
-    if(tokenContract) {
-      const currentAllowance = await tokenContract.allowance(address, engagerContract.address);  
+    if (tokenContract) {
+      console.log(address)
+      console.log(engagerContract.address)
+      const currentAllowance = await tokenContract.allowance(address, engagerContract.address);
       if (currentAllowance < budgetAmountInUnits) {
         const tx = await tokenContract.approve(engagerContract.address, budgetAmountInUnits);
         await tx.wait();
@@ -174,15 +187,16 @@ const CreateAds: React.FC = () => {
     }
 
     try {
-      const tx = await engagerContract.registerAd(
-        response.data.ad._id,
-        response.data.ad.description,
-        response.data.ad.amountAllocated,
-        response.data.ad.tokenAddress,
-        response.data.ad.endTimestamp,
-        response.data.ad.requiredFollowers
-      )
-      console.log(tx)
+      console.log(  selectedToken.address, "selectedToken.address");
+      const tx = await engagerContract.submitAd(
+        response?.data.ad._id,
+        response?.data.ad.adDescription,
+        budgetAmountInUnits,
+        selectedToken.address,
+        response?.data.ad.endtimestamp,
+        response?.data.ad.requiredFollowers
+      , { value: tokenContract ?  0 : budgetAmountInUnits  });
+      console.log(tx);
       await tx.wait();
       alert("Campaign successfully created!");
     } catch (error) {
@@ -229,6 +243,7 @@ const CreateAds: React.FC = () => {
               handlePrevious={handlePrevious}
               handleNext={handleNext}
               setMediaFile={setMediaFile}
+              attestedLink={attestedLink} setAttestedLink={setAttestedLink}
             />
           </TabPanel>
 
