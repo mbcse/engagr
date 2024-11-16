@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   VStack,
@@ -10,10 +10,7 @@ import {
   FormControl,
   FormLabel,
   Button,
-  Select,
   Divider,
-  Alert,
-  AlertIcon,
   Slider,
   SliderTrack,
   SliderFilledTrack,
@@ -45,7 +42,6 @@ const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
   setDailyBudget,
   durationMinutes,
   setDurationMinutes,
-  paymentMethod,
   setPaymentMethod,
   handlePrevious,
   handleFinish,

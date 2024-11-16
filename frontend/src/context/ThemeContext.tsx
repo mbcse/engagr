@@ -15,6 +15,7 @@ const ThemeContext = createContext<ThemeContextProps>({
 const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  // @ts-expect-error
   const [theme, setTheme] = useState<keyof typeof Theme>("");
 
   function toggleTheme() {
