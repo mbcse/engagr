@@ -7,9 +7,11 @@ import CreateAd from "./CreateAd";
 import CustomizeDelivery from "./CustomizeDelivery";
 
 import { uploadFile } from "@/utils/ipfsHelper";
-import { useAccount } from "wagmi";
-import axios from "axios";
+import { useAccount, useChainId } from "wagmi";
 import { type MarketingGoal } from "./AllocateBudget";
+import { getDefaultEthersSigner } from "@/utils/clientToEtherjsSigner";
+import { ERC20ABI, TOKEN_ENGAGR_ABI, TOKEN_ENGAGR_CONTRACT_ADDRESS } from "@/config";
+import { ethers } from "ethers";
 
 const CreateAds: React.FC = () => {
   // States for objectives
@@ -41,7 +43,7 @@ const CreateAds: React.FC = () => {
 
   const [marketingGoals, setMarketingGoals] = useState<MarketingGoal[]>(initialGoals);
   const [followerRange, setFollowerRange] = useState(0);
-  const [durationMinutes, setDurationMinutes] = useState<number>(0)
+  const [durationMinutes, setDurationMinutes] = useState<number>(0);
 
   // Tab navigation
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -58,7 +60,57 @@ const CreateAds: React.FC = () => {
     }
   };
 
-  const { chainId, address } = useAccount();
+  const { address } = useAccount();
+  const chainId = useChainId();
+  const tokenEngagrContractAddress = TOKEN_ENGAGR_CONTRACT_ADDRESS[chainId];
+
+  // find here
+  // const client = new SignProtocolClient(SpMode.OnChain, {
+  //   chain: chainId,
+  //   account: address,
+  // });
+
+  const tokenList = [
+    {
+      name: "Ethereum",
+      address: "0x0000000000000000000000000000000000000000",
+      symbol: "ETH",
+      decimals: 18,
+      image: "https://wallet-api-production.s3.amazonaws.com/uploads/tokens/eth_288.png",
+    },
+    {
+      name: "USDC",
+      address: "0xA512f02EEa71580CBB7B5C3017F1f80A365f8329",
+      symbol: "USDC",
+      decimals: 6,
+      image:
+        "https://d3r81g40ycuhqg.cloudfront.net/wallet/wais/44/2b/442b80bd16af0c0d9b22e03a16753823fe826e5bfd457292b55fa0ba8c1ba213.png",
+    },
+  ];
+
+  const [selectedToken, setSelectedToken] = useState<any>(null);
+
+  const getTokenData = async () => {
+    const signer = await getDefaultEthersSigner();
+    let tokenContract = null;
+    let tokenDecimals = null;
+    let tokenSymbol = null;
+
+    if (selectedToken.address === "0x0000000000000000000000000000000000000000") {
+      tokenDecimals = 18;
+      tokenSymbol = "ETH";
+    } else {
+      // Get token Contract
+      tokenContract = new ethers.Contract(selectedToken.address, ERC20ABI, signer);
+      // Get Token Decimal
+      tokenDecimals = await tokenContract.decimals();
+
+      // Get Token Symbol
+      tokenSymbol = await tokenContract.symbol();
+    }
+
+    return { tokenContract, tokenDecimals, tokenSymbol };
+  };
 
   const handleFinish = async () => {
     console.log("Campaign successfully created!", mediaFile);
@@ -79,21 +131,42 @@ const CreateAds: React.FC = () => {
       // paymentMethod,
       // mediaFile,
       chainId: chainId,
-      endtimestamp: Math.floor(Date.now() / 1000) + 10 * 60,
+      endtimestamp: Math.floor(Date.now() / 1000) + durationMinutes * 60,
       requiredFollowers: 10,
       marketer: localStorage.getItem("user")?.trim(),
       objective: selectedObjective,
-      followerRange, 
-      durationMinutes
+      followerRange,
+      durationMinutes,
     };
+
+    // transactions
 
     console.log(payload, "payload ----");
     // try {
-    //   const response = await axios.post("http://localhost:3002/engagr/register-ad", payload);
+    //   const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_DEPLOYED_URL}/engagr/register-ad`, payload);
     //   console.log(response, "response from server");
     // } catch (error: any) {
     //   console.error("Error:", error.message);
     // }
+
+    const signer = await getDefaultEthersSigner();
+    console.log(signer, "signer -----");
+
+    const { tokenDecimals, tokenSymbol } = await getTokenData();
+    console.log(tokenDecimals, tokenSymbol, "tokenDecimals, tokenSymbol");
+
+    // Get Token Treat Contract
+    // @ts-nocheck
+    const engagerContract = new ethers.Contract(
+      tokenEngagrContractAddress,
+      TOKEN_ENGAGR_ABI,
+      signer,
+    );
+
+
+    // Convert Treat amount in decimals
+    const treatAmountInUnits = ethers.parseUnits(dailyBudget, tokenDecimals);
+    console.log(treatAmountInUnits, 'treatAmountInUnits -----')
 
     alert("Campaign successfully created!");
   };
@@ -154,6 +227,9 @@ const CreateAds: React.FC = () => {
               setMarketingGoals={setMarketingGoals}
               followerRange={followerRange}
               setFollowerRange={setFollowerRange}
+              selectedToken={selectedToken}
+              setSelectedToken={setSelectedToken}
+              tokenList={tokenList}
             />
           </TabPanel>
         </TabPanels>

@@ -12,7 +12,7 @@ const fetchUser = async (accountAddress: string, email: string) => {
       console.error("Twitter and address are required.");
       return;
     }
-    const response = await axios.post("http://localhost:3002/engagr/get-register-marketer", {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_DEPLOYED_URL}/engagr/get-register-marketer`, {
       accountAddress,
       email,
     });
