@@ -23,8 +23,7 @@ function AppProvider({ children }: { children: React.ReactNode }) {
   const appInfo = {
     appName: "NextJs",
   };
-
-  console.log(process.env.NEXT_PUBLIC_DYNAMIC_ID, 'NEXT_PUBLIC_DYNAMIC_ID')
+  
   return (
     <ThemeProvider>
       <DynamicContextProvider
