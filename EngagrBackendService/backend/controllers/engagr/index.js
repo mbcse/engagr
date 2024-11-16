@@ -113,7 +113,8 @@ export const publishAd = async (req, res) => {
       endtimestamp,
       media,
       requiredFollowers,
-      marketer
+      marketer,
+      objective
     } = req.body
 
     console.log(req.body, 'req.body')
@@ -137,11 +138,16 @@ export const publishAd = async (req, res) => {
       endtimestamp,
       media,
       requiredFollowers,
-      marketer
+      marketer,
+      objective
     })
 
     // Save Ad to database
     await newAd.save()
+
+    const marketerData = await Marketer.findOne({ _id: marketer })
+    marketerData.adsPublished.push(newAd._id)
+    await marketerData.save()
 
     // Return saved Ad details
     return res.status(201).json({ ad: newAd })
