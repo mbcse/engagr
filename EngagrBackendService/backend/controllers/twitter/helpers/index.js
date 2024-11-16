@@ -1,8 +1,9 @@
 import { TwitterApi } from 'twitter-api-v2'
 
 import Tweet from '../../../database/registerMentions.js'
-
-import PromotedTweet from '../../../database/promotedTweets.js'
+import Ad from '../../../database/ads.js'
+import Promoter from '../../../database/promoter.js'
+import ProcessedUserTweetsForAds from '../../../database/processedUserTweetsForAds.js'
 import axios from 'axios'
 
 import path from 'path'
@@ -112,7 +113,7 @@ export const getTweetStats = async (tweetId) => {
 // await listenToUserTweets()
 
 // Function to fetch mentions and reply if "register" is mentioned
-const fetchMentions = async () => {
+export const fetchMentions = async () => {
   try {
     const mentions = await bearer.v2.userMentionTimeline('1463596485585502209') //, { end_time: '2020-01-01' }
     console.log(mentions)
@@ -154,34 +155,44 @@ const downloadImageFromIPFS = async (ipfsLink, localPath) => {
   }
 }
 
-const fetchAndCheckUserTweetsAndPushAds = async (userId, addDescription, imageIpfsLink) => {
+export const fetchAndCheckUserTweetsAndPushAds = async (twitterId, addDescription, imageIpfsLink, adId) => {
   try {
-    const tweets = await twitterClient.v2.userTimeline(userId, { max_results: 5 })
+    const tweets = await twitterClient.v2.userTimeline(twitterId, { max_results: 5 })
     console.log(tweets)
     for (const tweet of tweets._realData.data) {
-      const existingTweet = await PromotedTweet.findOne({ tweetId: tweet.id })
+      const existingTweet = await ProcessedUserTweetsForAds.findOne({ tweetId: tweet.id })
 
       if (!existingTweet) {
-        // Store new tweet in the database
-        const newTweet = new PromotedTweet({
-          tweetId: tweet.id,
-          userId: tweet.author_id,
-          text: tweet.text,
-          timestamp: new Date()
-        })
-        await newTweet.save()
         const localPath = path.resolve('./temp_image.jpg')
         await downloadImageFromIPFS(imageIpfsLink, localPath)
 
         const mediaId = await twitterClient.v1.uploadMedia(localPath) // Comment on the tweet
         const tweetResponse = await twitterClient.v2.tweet(addDescription, {
-          reply: { in_reply_to_tweet_id: newTweet.tweetId },
+          reply: { in_reply_to_tweet_id: tweet.id },
           media: { media_ids: [mediaId] }
         })
         console.log('Replied to tweet:', tweetResponse)
-        console.log(`Replied to tweet from ${userId}: ${tweet.id}`)
+        console.log(`Replied to tweet from ${twitterId}: ${tweet.id}`)
         await fs.unlink(localPath)
         console.log('Temporary file removed.')
+        // Store new tweet in the database
+
+        const user = await Promoter.findOne({
+          twitterId
+        })
+
+        const newTweet = new ProcessedUserTweetsForAds({
+          userTweetId: tweet.id,
+          adTweetId: tweetResponse.data.id,
+          userId: user._id,
+          adId,
+          text: tweet.text,
+          timestamp: new Date()
+        })
+        await newTweet.save()
+
+        const ad = await Ad.findOne({ _id: adId })
+        ad.promoters.push()
       }
     }
   } catch (error) {

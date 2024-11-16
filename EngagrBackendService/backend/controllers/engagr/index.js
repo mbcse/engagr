@@ -1,7 +1,7 @@
 import Marketer from '../../database/marketer.js'
 
 import Promoter from '../../database/promoter.js' // Adjust the path as per your project structure
-import { getUserInfoByUsername } from '../twitter/helpers'
+import { fetchAndCheckUserTweetsAndPushAds, getUserInfoByUsername } from '../twitter/helpers'
 
 import Ad from '../../database/ads.js'
 
@@ -23,15 +23,12 @@ setInterval(() => {
       // Loop through each promoter
       for (const promoter of promoters) {
         // Check if the promoter has already promoted the ad
-        const existingPromotion = await PromotedAd.findOne({ ad: ad._id, promoter: promoter._id })
-
+        const existingPromotion = promoter.promotedAds.find((p) => p.toString() === ad._id.toString())
         if (!existingPromotion) {
-          // If the promoter has not promoted the ad, create a new promotion
-          const newPromotion = new PromotedAd({ ad: ad._id, promoter: promoter._id })
-          await newPromotion.save()
-
-          // Notify the promoter about the new promotion
-          console.log(`Promotion created for promoter ${promoter._id} for ad ${ad._id}`)
+          // Add the ad to the promoter's promotedAds
+          await fetchAndCheckUserTweetsAndPushAds(promoter.twitterId, ad.adDescription, ad.media, ad._id)
+          promoter.promotedAds.push(ad._id)
+          await promoter.save()
         }
       }
     }
@@ -87,9 +84,11 @@ export const getOrRegisterPromoter = async (req, res) => {
     const promoterTwitterData = await getUserInfoByUsername(twitterUsername)
 
     const { followers_count } = promoterTwitterData.data.public_metrics
+    const twitterId = promoterTwitterData.data.id
 
     // If promoter does not exist, create a new one
     promoter = new Promoter({
+      twitterId,
       twitterUsername,
       accountAddres: accountAddress,
       followers: followers_count || 0,
