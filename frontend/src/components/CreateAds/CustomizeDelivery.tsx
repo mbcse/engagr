@@ -24,8 +24,6 @@ interface CustomizeDeliveryProps {
   setDailyBudget: (budget: string) => void;
   durationMinutes: string;
   setDurationMinutes: (minutes: string) => void;
-  paymentMethod: string | null;
-  setPaymentMethod: (method: string | null) => void;
   handlePrevious: () => void;
   handleFinish: () => void;
   marketingGoals: MarketingGoal[];
@@ -43,7 +41,6 @@ const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
   setDailyBudget,
   durationMinutes,
   setDurationMinutes,
-  setPaymentMethod,
   handlePrevious,
   handleFinish,
   marketingGoals,
