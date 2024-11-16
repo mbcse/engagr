@@ -18,12 +18,7 @@ const promotersSchema = new Schema({
     default: 0
   },
   accountAddres: String
-}, {
-  timestamps: {
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
-  }
-})
+}, { timestamps: true })
 
 const model = mongoose.model('promoters', promotersSchema)
 export default model

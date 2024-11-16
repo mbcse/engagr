@@ -58,12 +58,7 @@ const userSchema = new Schema({
     }
   ]
 
-}, {
-  timestamps: {
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
-  }
-})
+}, { timestamps: true })
 
 const User = mongoose.model('users', userSchema)
 export default User

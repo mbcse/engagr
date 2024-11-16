@@ -10,12 +10,8 @@ const adsSchema = new Schema({
   endtimestamp: Number,
   media: String,
   requiredFollowers: Number,
-  marketer: String,
-  timestamps: {
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
-  }
-})
+  marketer: String
+}, { timestamps: true })
 
 const model = mongoose.model('ads', adsSchema)
 export default model
