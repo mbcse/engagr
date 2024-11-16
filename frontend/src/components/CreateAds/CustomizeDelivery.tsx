@@ -22,8 +22,8 @@ import TokenSelector from "../TokenSelector";
 interface CustomizeDeliveryProps {
   dailyBudget: string;
   setDailyBudget: (budget: string) => void;
-  durationMinutes: number;
-  setDurationMinutes: (minutes: number) => void;
+  durationMinutes: string;
+  setDurationMinutes: (minutes: string) => void;
   paymentMethod: string | null;
   setPaymentMethod: (method: string | null) => void;
   handlePrevious: () => void;
@@ -32,9 +32,10 @@ interface CustomizeDeliveryProps {
   setMarketingGoals: (goals: MarketingGoal[]) => void;
   followerRange: number;
   setFollowerRange: (range: number) => void;
-  setSelectedToken : any;
-  selectedToken : any;
-  tokenList : any;
+  setSelectedToken: any;
+  selectedToken: any;
+  tokenList: any;
+  loading: boolean;
 }
 
 const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
@@ -52,8 +53,10 @@ const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
   setSelectedToken,
   selectedToken,
   tokenList,
+  loading,
 }) => {
 
+  console.log(loading, 'loading')
   return (
     <Box
       p={6}
@@ -79,23 +82,13 @@ const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
 
         {/* Daily Budget Input */}
         <HStack spacing={4}>
-          <FormControl>
-            <HStack>
-              <Input
-                type="number"
-                value={dailyBudget}
-                onChange={(e) => setDailyBudget(e.target.value)}
-              />
-            </HStack>
-          </FormControl>
-
           {/* Duration Input in Minutes */}
           <FormControl>
             <FormLabel>Duration (Minutes)</FormLabel>
             <Input
               type="number"
               value={durationMinutes}
-              onChange={(e) => setDurationMinutes(Number(e.target.value))}
+              onChange={(e) => setDurationMinutes(e.target.value)}
               placeholder="e.g., 60"
             />
           </FormControl>
@@ -139,13 +132,11 @@ const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
             setSelectedToken={setSelectedToken}
             tokens={tokenList}
           />
-          <Button
-            onClick={() => setPaymentMethod("Credit Card")}
-            colorScheme="blue"
-            variant="outline"
-          >
-            + Pay Now
-          </Button>
+          <Input
+            type="number"
+            value={dailyBudget}
+            onChange={(e) => setDailyBudget(e.target.value)}
+          />
         </HStack>
       </VStack>
 
@@ -156,6 +147,7 @@ const CustomizeDelivery: React.FC<CustomizeDeliveryProps> = ({
         marketingGoals={marketingGoals}
         setMarketingGoals={setMarketingGoals}
         handleFinish={handleFinish}
+        loading={loading}
       />
 
       {/* Navigation Buttons */}

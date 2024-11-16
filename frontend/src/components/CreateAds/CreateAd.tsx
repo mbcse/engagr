@@ -15,6 +15,7 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
+import axios from "axios";
 
 interface CreateAdProps {
   adText: string;
@@ -26,6 +27,8 @@ interface CreateAdProps {
   handlePrevious: () => void;
   handleNext: () => void;
   setMediaFile: (media: FileList | null) => void;
+  attestedLink : string,
+  setAttestedLink : (attestedLink: string) => void;
 }
 
 const CreateAd: React.FC<CreateAdProps> = ({
@@ -38,6 +41,8 @@ const CreateAd: React.FC<CreateAdProps> = ({
   handlePrevious,
   handleNext,
   setMediaFile,
+  attestedLink,
+  setAttestedLink
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -57,19 +62,17 @@ const CreateAd: React.FC<CreateAdProps> = ({
     fileInputRef.current?.click();
   };
 
-  const [attestedLink, setAttestedLink] = useState(false);
-
-  console.log(attestedLink, "attestedLink");
   const getAttestedLink = async () => {
     try {
-      // const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_DEPLOYED_URL}/engagr/attest/shorten`, {
-        // originalUrl: websiteDetails,
-      // });
-      // console.log(response, "response ATTEST LINK");
-      // setAdText(adText + " " + `\n\ ${response.data.shortUrl}`);
-      setAttestedLink(true);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_DEPLOYED_URL}/engagr/attest/shorten`, {
+        originalUrl: websiteDetails,
+      });
+      console.log(response, "response ATTEST LINK");
+      const data = adText + " " + `\n\ ${response.data.shortUrl}`
+      setAdText(data);
+      setAttestedLink(response.data.shortUrl);
     } catch (error) {
-      setAttestedLink(false);
+      setAttestedLink('');
     }
   };
 
