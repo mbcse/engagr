@@ -68,6 +68,8 @@ export default {
     LIST: queue
   },
 
+  DEPLOY_URL: process.env.DEPLOY_URL || "http://localhost:3000",
+
   DB_CONSTANTS: dbConstants,
 
   KEY_SECURE_PASSWORD: process.env.KEY_SECURE_PASSWORD || 'planetx12345',
