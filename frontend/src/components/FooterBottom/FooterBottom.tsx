@@ -5,7 +5,7 @@ const FooterBottom = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-black text-sm w-full mt-40">
+    <footer className="bg-slate-950 text-sm w-full mt-40">
       <div className="w-[90%] m-auto py-5 flex flex-col md:flex-row lg:flex-row justify-between items-center text-gray-600 font-medium">
         <Link href={'/'} className="flex items-center gap-1">
           <Image

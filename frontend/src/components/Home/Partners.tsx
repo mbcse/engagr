@@ -5,7 +5,9 @@ import { InfiniteMovingCards } from "../ui/infinite-moving-cards.tsx";
 export function Partners() {
   return (
     <div className="h-[20rem] rounded-md flex flex-col antialiaseddark:bg-grid-white/[0.05] items-center justify-center overflow-hidden">
-      <p className="text-neutral-400 text-center text-xl font-medium mb-4">Trusted by big industries</p>
+      <p className="text-neutral-500 text-center text-xl font-medium mb-4">
+        Trusted by big industries
+      </p>
       <InfiniteMovingCards
         items={[
           { image: "https://skill-connect-job-board.vercel.app/delloite.svg" },
