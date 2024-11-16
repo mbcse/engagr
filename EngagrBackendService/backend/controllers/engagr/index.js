@@ -44,9 +44,12 @@ setInterval(() => {
         const existingPromotion = promoter.promotedAds.find((p) => p.toString() === ad._id.toString())
         if (!existingPromotion) {
           // Add the ad to the promoter's promotedAds
-          await fetchAndCheckUserTweetsAndPushAds(promoter.twitterId, ad.adDescription, ad.media, ad._id)
-          promoter.promotedAds.push(ad._id)
-          await promoter.save()
+          const success = await fetchAndCheckUserTweetsAndPushAds(promoter.twitterId, ad.adDescription, ad.media, ad._id)
+          
+          if(success) {
+            promoter.promotedAds.push(ad._id)
+            await promoter.save()
+          }
         }
       }
     }

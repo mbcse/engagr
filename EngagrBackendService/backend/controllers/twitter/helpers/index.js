@@ -100,7 +100,7 @@ export const getTweetStats = async (tweetId) => {
       'tweet.fields': ['public_metrics', 'created_at']
     })
     console.log('Tweet Stats:', tweet)
-    return tweet.data.public_metrics
+    return tweet
   } catch (error) {
     console.error('Error fetching tweet stats:', error)
   }
@@ -183,14 +183,16 @@ export const fetchAndCheckUserTweetsAndPushAds = async (twitterId, addDescriptio
       console.log(tweet)
       const tweetStats = await getTweetStats(tweet.id)
       console.log('Tweet Stats:', tweetStats)
-      const unixTimestamp = Math.floor(new Date(tweetStats.created_at).getTime() / 1000);
+      console.log(tweetStats.data.created_at)
+      const unixTimestamp = Math.floor(new Date(tweetStats.data.created_at).getTime() / 1000);
+      const createdAtunixTimestamp = Math.floor(new Date(ad.createdAt).getTime() / 1000);
 
       console.log('Tweet created at:', unixTimestamp)
-      console.log('Ad start time:', ad.createdAt)
+      console.log('Ad start time:', createdAtunixTimestamp)
       console.log(ad)
-      if (unixTimestamp < ad.createdAt) {
+      if (unixTimestamp < createdAtunixTimestamp) {
         console.log('Tweet is older than the campaign start time. Skipping...')
-        continue
+        return false
       }
 
       const existingTweet = await ProcessedUserTweetsForAds.findOne({ tweetId: tweet.id, adId })
@@ -226,10 +228,12 @@ export const fetchAndCheckUserTweetsAndPushAds = async (twitterId, addDescriptio
         
         ad.promoters.push()
         await ad.save()
+        return true
       }
     }
   } catch (error) {
     console.error('Error fetching user tweets:', error)
+    return false
   }
 }
 
