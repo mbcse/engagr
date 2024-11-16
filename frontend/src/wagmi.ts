@@ -15,7 +15,8 @@ import { createConfig, http } from "wagmi";
 import {
 
   base,
-  polygonAmoy
+  polygonAmoy,
+  
 
 } from "wagmi/chains";
 

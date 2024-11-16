@@ -13,9 +13,10 @@ import {
   TableContainer,
   HStack,
   Button,
-  useColorModeValue,
+  IconButton,
   useDisclosure,
 } from "@chakra-ui/react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import CampaignDetailsModal from "./CampaignDetailsModal";
 
 // Dummy campaign data generator
@@ -68,7 +69,7 @@ const CampaignHistoryTable = () => {
 
   return (
     <Box p={8} maxWidth="1200px" mx="auto" height="90vh">
-      <Text fontSize="2xl" mb={6} fontWeight="bold" className="text-gray-300">
+      <Text fontSize="2xl" mb={6} fontWeight="bold" color="gray.300">
         Campaign History
       </Text>
       <TableContainer
@@ -76,16 +77,15 @@ const CampaignHistoryTable = () => {
         borderColor="gray.200"
         borderRadius="md"
         overflowY="auto"
-        className="text-gray-300"
       >
         <Table variant="simple">
-          <Thead className="text-gray-300">
+          <Thead>
             <Tr>
-              <Th>Campaign ID</Th>
-              <Th>Target Audience</Th>
-              <Th>Amount</Th>
-              <Th>Start Date</Th>
-              <Th>End Date</Th>
+              <Th color="white">Campaign ID</Th>
+              <Th color="white">Target Audience</Th>
+              <Th color="white">Amount</Th>
+              <Th color="white">Start Date</Th>
+              <Th color="white">End Date</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -95,11 +95,11 @@ const CampaignHistoryTable = () => {
                 onClick={() => handleRowClick(campaign)}
                 _hover={{ bg: hoverBg, cursor: "pointer" }}
               >
-                <Td>{campaign.name}</Td>
-                <Td>{campaign.targetAudience}</Td>
-                <Td>{campaign.payoutInfo}</Td>
-                <Td>{campaign.startDate}</Td>
-                <Td>{campaign.endDate}</Td>
+                <Td color="white">{campaign.name}</Td>
+                <Td color="white">{campaign.targetAudience}</Td>
+                <Td color="white">{campaign.payoutInfo}</Td>
+                <Td color="white">{campaign.startDate}</Td>
+                <Td color="white">{campaign.endDate}</Td>
               </Tr>
             ))}
           </Tbody>
@@ -107,16 +107,35 @@ const CampaignHistoryTable = () => {
       </TableContainer>
 
       {/* Pagination Controls */}
-      <HStack justifyContent="center" spacing={4} mt={4} className="text-gray-300">
-        <Button onClick={handlePreviousPage} isDisabled={currentPage === 1} colorScheme="blue">
-          Previous
-        </Button>
-        <Text>
-          Page {currentPage} of {totalPages}
-        </Text>
-        <Button onClick={handleNextPage} isDisabled={currentPage === totalPages} colorScheme="blue">
-          Next
-        </Button>
+      <HStack justifyContent="center" spacing={4} mt={4} mb={4} color="gray.300">
+        <IconButton
+          icon={<ChevronLeftIcon />}
+          onClick={handlePreviousPage}
+          isDisabled={currentPage === 1}
+          aria-label="Previous Page"
+          colorScheme="blue"
+        />
+        
+        {/* Page number buttons */}
+        {Array.from({ length: totalPages }).map((_, index) => (
+          <Button
+            key={index}
+            onClick={() => setCurrentPage(index + 1)}
+            isActive={currentPage === index + 1}
+            colorScheme="blue"
+            variant={currentPage === index + 1 ? "solid" : "outline"}
+          >
+            {index + 1}
+          </Button>
+        ))}
+
+        <IconButton
+          icon={<ChevronRightIcon />}
+          onClick={handleNextPage}
+          isDisabled={currentPage === totalPages}
+          aria-label="Next Page"
+          colorScheme="blue"
+        />
       </HStack>
 
       {/* Campaign Details Modal */}

@@ -3,6 +3,7 @@
 import { LayoutDashboard, Users, FileText, Settings, BarChart, Layers } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 type SidebarProps = {
   open: boolean;
@@ -29,6 +30,14 @@ const menuItems = {
 const Sidebar: React.FC<SidebarProps> = ({ open, setOpen, setActiveContent, role }) => {
   const items = menuItems[role];
 
+  // State to track the active menu item
+  const [activeItem, setActiveItem] = useState<string>("dashboard");
+
+  const handleItemClick = (id: string) => {
+    setActiveItem(id);
+    setActiveContent(id);
+  };
+
   return (
     <div
       className={`${
@@ -36,9 +45,15 @@ const Sidebar: React.FC<SidebarProps> = ({ open, setOpen, setActiveContent, role
       } flex flex-col h-screen p-3 bg-slate-900 border-r border-gray-600 shadow duration-300`}
     >
       <div className="space-y-3">
-        <div className={`flex items-center  ${open && "justify-between"}`}>
+        <div className={`flex items-center ${open && "justify-between"}`}>
           <Link href="/">
-            <Image src="/light_engagr_transparent.png" alt="logo" width={100} height={100} className={`ml-0 ${!open && "hidden"}`} />
+            <Image
+              src="/light_engagr_transparent.png"
+              alt="logo"
+              width={100}
+              height={100}
+              className={`ml-0 ${!open && "hidden"}`}
+            />
           </Link>
           <button onClick={() => setOpen(!open)} className="p-2">
             <svg
@@ -69,8 +84,13 @@ const Sidebar: React.FC<SidebarProps> = ({ open, setOpen, setActiveContent, role
           {items.map((item) => (
             <li key={item.id} className="rounded-sm">
               <button
-                onClick={() => setActiveContent(item.id)}
-                className="flex items-center p-2 space-x-3 rounded-md w-full text-left text-gray-300 hover:bg-gray-700"
+                onClick={() => handleItemClick(item.id)}
+                aria-label={`Open ${item.name}`}
+                className={`flex items-center p-2 space-x-3 rounded-md w-full text-left ${
+                  activeItem === item.id
+                    ? "bg-blue-600 text-white"
+                    : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                }`}
               >
                 <item.icon className="w-6 h-6" />
                 <span className={`${!open && "hidden"}`}>{item.name}</span>

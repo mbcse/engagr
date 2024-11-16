@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Box, SimpleGrid, Image, Heading, Text } from "@chakra-ui/react";
 
 interface Objective {

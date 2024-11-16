@@ -1,4 +1,4 @@
-import { useColorModeValue } from "@chakra-ui/react";
+
 import { DynamicWidget, useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import axios from "axios";
 import { Box } from "@chakra-ui/react";
@@ -43,10 +43,6 @@ const MarketDashboard = () => {
     <Box p={8}>
       {user ? (
         <div>
-          <div className="flex justify-end items-end pb-4 w-full">
-            <div className="w-60"></div>
-            <DynamicWidget variant="dropdown" innerButtonComponent="Login" />
-          </div>
           <div>
             {" "}
             <AdStatsDashboard

@@ -1,12 +1,13 @@
 import express from 'express'
+import { nanoid } from 'nanoid'
 
 import ShortUrl from '../../database/shortUrls.js'
 import config from '../../config/index.js'
 const router = express.Router()
-const { nanoid } = require('nanoid')
 
 router.post('/shorten', async (req, res) => {
   const { originalUrl } = req.body
+  console.log('originalUrl', originalUrl)
   if (!originalUrl) {
     return res.status(400).json({ error: 'Original URL is required' })
   }
