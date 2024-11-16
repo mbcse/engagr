@@ -3,7 +3,6 @@
 import React, { type ReactNode, useState } from "react";
 import Sidebar from "./Sidebar";
 import DynamicContent from "./DynamicContent";
-import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
 
 type DashboardLayoutProps = {
   role: "admin" | "promoter";

@@ -8,11 +8,13 @@ const progressCallback = (progressData : any) => {
 
 export const uploadFile = async (file: any) => {
     console.log(file)
+    // @ts-ignore
     const output = await lighthouse.upload(file,  api_key, false, null, progressCallback)
     return "ipfs://"+ output.data.Hash
 }
 
 export const uploadJson = async (json: any) => {
+    // @ts-ignore
     const output = await lighthouse.uploadText(JSON.stringify(json), api_key)
     return "ipfs://"+ output.data.Hash
 }

@@ -25,7 +25,7 @@ const navItems = [
 
 export const FloatingNav = ({ className }: { className?: string }) => {
   
-  const [visible, setVisible] = useState(true);
+  const [visible] = useState(true);
 
   return (
     <AnimatePresence mode="wait">

@@ -1,7 +1,7 @@
 import React from "react";
-import { Flex, VStack, Text, Image, Select, Box } from "@chakra-ui/react";
+import { Flex, VStack ,Select } from "@chakra-ui/react";
 
-const TokenSelector = ({ selectedToken, setSelectedToken, tokens, chainId }: any) => {
+const TokenSelector = ({ selectedToken, setSelectedToken, tokens }: any) => {
   // Handle token selection
   const handleTokenChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedAddress = event.target.value;
@@ -34,36 +34,7 @@ const TokenSelector = ({ selectedToken, setSelectedToken, tokens, chainId }: any
             </option>
           ))}
         </Select>
-        {/* {selectedToken && (
-          <Box
-            display="flex"
-            alignItems="center"
-            borderWidth="1px"
-            borderRadius="md"
-            borderColor="teal.500"
-            p={3}
-            bg="gray.50"
-          >
-            {selectedToken.image && (
-              <Image
-                src={selectedToken.image}
-                alt={selectedToken.symbol}
-                boxSize="32px"
-                borderRadius="full"
-                mr={3}
-              />
-            )}
-            <Box>
-              <Text fontWeight="bold">{selectedToken.name}</Text>
-              <Text fontSize="sm" color="gray.600">
-                {selectedToken.symbol}
-              </Text>
-              <Text fontSize="xs" color="gray.500">
-                Address: {selectedToken.address}
-              </Text>
-            </Box>
-          </Box>
-        )} */}
+       
       </Flex>
     </VStack>
   );
