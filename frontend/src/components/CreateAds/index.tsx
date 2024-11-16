@@ -67,9 +67,9 @@ const CreateAds: React.FC = () => {
       // paymentMethod,
       // mediaFile,
       chainId: chainId,
-      endtimestamp: Math.floor(Date.now() / 1000) + 4 * 60,
-      requiredFollowers: 100,
-      marketer: address,
+      endtimestamp: Math.floor(Date.now() / 1000) + 10 * 60,
+      requiredFollowers: 10,
+      marketer: localStorage.getItem("user")?.trim(),
       objective: selectedObjective,
     };
 

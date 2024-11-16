@@ -16,6 +16,8 @@ const fetchUser = async (accountAddress: string, email: string) => {
       email,
     });
     console.log(response, "response");
+
+    localStorage.setItem("user", response.data.userId);
   } catch (error: any) {
     console.error("Error:", error.message);
   }
