@@ -51,7 +51,7 @@ setInterval(() => {
       }
     }
   })
-}, 180000)
+}, 30000)
 
 export const getOrRegisterMarketer = async (req, res) => {
   try {

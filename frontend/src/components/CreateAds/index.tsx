@@ -38,8 +38,6 @@ const CreateAds: React.FC = () => {
 
   // Updated: Changed dateRange to use Date[]
 
-  const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
-
   const [marketingGoals, setMarketingGoals] = useState<MarketingGoal[]>(initialGoals);
   const [followerRange, setFollowerRange] = useState(0);
   const [durationMinutes, setDurationMinutes] = useState<string>("");
@@ -146,7 +144,7 @@ const CreateAds: React.FC = () => {
 
     // transactions
 
-    console.log(payload, "payload ----", loading);
+    console.log(payload, "payload ----", loading, 'loading');
     let response;
     try {
       response = await axios.post(
@@ -190,7 +188,7 @@ const CreateAds: React.FC = () => {
     }
 
     try {
-      console.log(  selectedToken.address, "selectedToken.address");
+      console.log(  response?.data.ad, "selectedToken.address");
       const tx = await engagerContract.submitAd(
         response?.data.ad._id,
         response?.data.ad.adDescription,
@@ -261,8 +259,6 @@ const CreateAds: React.FC = () => {
               setDailyBudget={setDailyBudget}
               durationMinutes={durationMinutes}
               setDurationMinutes={setDurationMinutes}
-              paymentMethod={paymentMethod}
-              setPaymentMethod={setPaymentMethod}
               handlePrevious={handlePrevious}
               handleFinish={handleFinish}
               marketingGoals={marketingGoals}
