@@ -11,10 +11,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const router = express.Router()
-
-const { nanoid } = require('nanoid')
-
-const privateKey = process.env.PRIVATE_KEY;
+const privateKey = process.env.ADMIN_PRIVATE_KEY;
 
 const client = new SignProtocolClient(SpMode.OnChain, {
   chain: EvmChains.polygonAmoy,

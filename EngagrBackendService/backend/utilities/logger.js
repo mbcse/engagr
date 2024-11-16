@@ -8,12 +8,23 @@ import 'winston-daily-rotate-file'
 const { printf, timestamp, combine } = format
 
 const myFormat = printf(({ level, message, timestamp, exception, meta }) => {
-  // return `${timestamp} Exception: ${exception} Level: ${level}: ${message}`
-  if (exception) {
-    return JSON.stringify({ level: [level], timestamp, exception: exception || false, message: message.split('\n')[0] })
-  } else {
-    return JSON.stringify({ level: [level], timestamp, exception: exception || false, message })
+  // // return `${timestamp} Exception: ${exception} Level: ${level}: ${message}`
+  // if (exception) {
+  //   return JSON.stringify({ level: [level], timestamp, exception: exception || false, message: message.split('\n')[0] })
+  // } else {
+  //   return JSON.stringify({ level: [level], timestamp, exception: exception || false, message })
+  // }
+
+
+  let log = { level: [level], timestamp, exception: exception || false, message };
+
+  // If the message is an error, include the stack trace
+  if (message instanceof Error) {
+    log.message = message.message; // Log the error message
+    log.stack = message.stack;    // Log the stack trace
   }
+
+  return JSON.stringify(log);
 })
 
 // define the custom settings for each transport (file, console)

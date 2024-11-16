@@ -8,16 +8,18 @@ import Ad from '../../database/ads.js'
 import { SignProtocolClient, SpMode, EvmChains } from "@ethsign/sp-sdk";
 import { privateKeyToAccount } from "viem/accounts";
 import dotenv from "dotenv";
+import { ethers } from 'ethers';
 dotenv.config();
 
-const privateKey = process.env.PRIVATE_KEY;
+const privateKey = process.env.ADMIN_PRIVATE_KEY;
 
 const client = new SignProtocolClient(SpMode.OnChain, {
   chain: EvmChains.polygonAmoy,
   account: privateKeyToAccount(privateKey),
 });
 
-
+const provider = new ethers.providers.JsonRpcProvider(process.env.MAIN_RPC_URL);
+const wallet = new ethers.Wallet(process.env.ADMIN_PRIVATE_KEY, provider);
 
 
 setInterval(() => {
