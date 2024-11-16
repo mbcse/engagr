@@ -1,23 +1,17 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import createCache from "@emotion/cache";
 import { ThemeProvider } from "@/context/ThemeContext";
 
 import { CacheProvider } from "@chakra-ui/next-js";
-import { extendTheme, ChakraProvider } from "@chakra-ui/react";
+import {  ChakraProvider } from "@chakra-ui/react";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 
 import { wagmiConfig } from "@/wagmi";
 
-import { DynamicContextProvider, DynamicWidget } from '@dynamic-labs/sdk-react-core';
+import { DynamicContextProvider } from '@dynamic-labs/sdk-react-core';
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
-
-// const emotionCache = createCache({
-//   key: "emotion-css-cache",
-//   prepend: true,
-// });
 
 function AppProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
@@ -25,11 +19,6 @@ function AppProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => setMounted(true), []);
 
   const queryClient = new QueryClient();
-
-  // const theme = extendTheme({
-  //   initialColorMode: "dark",
-  //   useSystemColorMode: true,
-  // });
 
   const appInfo = {
     appName: "NextJs",
@@ -49,7 +38,7 @@ function AppProvider({ children }: { children: React.ReactNode }) {
           <CacheProvider>
             <ChakraProvider>
               <RainbowKitProvider coolMode appInfo={appInfo}>
-              <DynamicWidget />
+              
                 {mounted && children}
                 
               </RainbowKitProvider>

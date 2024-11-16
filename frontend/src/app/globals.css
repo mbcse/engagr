@@ -2,11 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Doto:wght,ROND@700,0..100&family=Faculty+Glyphic&family=Geist+Mono:wght@100..900&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap");
+
 :root {
   --button-border: 1px solid rgba(152, 161, 192, 0.24);
   --button-box-shadow: 3px 4px 4px rgba(0, 0, 0, 0.4);
   --button-box-shadow-hover: 0px 0px 8px 8px rgba(30, 136, 229, 0.2);
   --transition-ease: all 0.3s ease;
+  
+}
+
+.sour-gummy {
+  font-family: "Sour Gummy", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
+.geist-mono {
+  font-family: "Geist Mono", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.faculty-glyphic-regular {
+  font-family: "Faculty Glyphic", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.doto {
+  font-family: "Doto", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-variation-settings: "ROND" 10;
 }
 
 * {
