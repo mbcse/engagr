@@ -68,7 +68,7 @@ export default {
     LIST: queue
   },
 
-  DEPLOY_URL: process.env.DEPLOY_URL || "http://localhost:3000",
+  DEPLOY_URL: process.env.DEPLOY_URL || "http://localhost:3002",
 
   DB_CONSTANTS: dbConstants,
 

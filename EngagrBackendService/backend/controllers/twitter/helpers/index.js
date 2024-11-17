@@ -179,7 +179,7 @@ export const fetchAndCheckUserTweetsAndPushAds = async (twitterId, addDescriptio
     const ad = await Ad.findOne({ _id: adId })
     const tweets = await twitterClient.v2.userTimeline(twitterId, { max_results: 5 })
     console.log(tweets)
-    for (const tweet of tweets._realData.data.slice(0, 2)) {
+    for (const tweet of tweets._realData.data.slice(0, 1)) {
       console.log(tweet)
       const tweetStats = await getTweetStats(tweet.id)
       console.log('Tweet Stats:', tweetStats)

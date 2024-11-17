@@ -68,14 +68,112 @@ const CreateAds: React.FC = () => {
 
   const tokenList = [
     {
-      name: "Ethereum",
+      name: "Polygon",
+      address: "0x0000000000000000000000000000000000000000",
+      symbol: "POL",
+      decimals: 18,
+      image: "https://wallet-api-production.s3.amazonaws.com/uploads/tokens/eth_288.png",
+    },
+    {
+      name: "USDC",
+      address: "0xA512f02EEa71580CBB7B5C3017F1f80A365f8329",
+      symbol: "USDC",
+      decimals: 6,
+      image:
+        "https://d3r81g40ycuhqg.cloudfront.net/wallet/wais/44/2b/442b80bd16af0c0d9b22e03a16753823fe826e5bfd457292b55fa0ba8c1ba213.png",
+    },
+    {
+      name: "Flow",
+      address: "0x0000000000000000000000000000000000000000",
+      symbol: "FLOW",
+      decimals: 18,
+      image: "https://wallet-api-production.s3.amazonaws.com/uploads/tokens/eth_288.png",
+    },
+    {
+      name: "USDC on Flow",
+      address: "0xA512f02EEa71580CBB7B5C3017F1f80A365f8329",
+      symbol: "USDC",
+      decimals: 6,
+      image:
+        "https://d3r81g40ycuhqg.cloudfront.net/wallet/wais/44/2b/442b80bd16af0c0d9b22e03a16753823fe826e5bfd457292b55fa0ba8c1ba213.png",
+    },
+    {
+      name: "USDC on Pol",
+      address: "0xA512f02EEa71580CBB7B5C3017F1f80A365f8329",
+      symbol: "USDC",
+      decimals: 6,
+      image:
+        "https://d3r81g40ycuhqg.cloudfront.net/wallet/wais/44/2b/442b80bd16af0c0d9b22e03a16753823fe826e5bfd457292b55fa0ba8c1ba213.png",
+    },
+    {
+      name: "Mantle",
+      address: "0x0000000000000000000000000000000000000000",
+      symbol: "MNT",
+      decimals: 18,
+      image: "https://wallet-api-production.s3.amazonaws.com/uploads/tokens/eth_288.png",
+    },
+    {
+      name: "USDC on Mantle",
+      address: "0xA512f02EEa71580CBB7B5C3017F1f80A365f8329",
+      symbol: "USDC",
+      decimals: 6,
+      image:
+        "https://d3r81g40ycuhqg.cloudfront.net/wallet/wais/44/2b/442b80bd16af0c0d9b22e03a16753823fe826e5bfd457292b55fa0ba8c1ba213.png",
+    },
+    {
+      name: "Chiliz",
+      address: "0x0000000000000000000000000000000000000000",
+      symbol: "CHZ",
+      decimals: 18,
+      image: "https://wallet-api-production.s3.amazonaws.com/uploads/tokens/eth_288.png",
+    },
+    {
+      name: "USDC on Chiliz",
+      address: "0xA512f02EEa71580CBB7B5C3017F1f80A365f8329",
+      symbol: "USDC",
+      decimals: 6,
+      image:
+        "https://d3r81g40ycuhqg.cloudfront.net/wallet/wais/44/2b/442b80bd16af0c0d9b22e03a16753823fe826e5bfd457292b55fa0ba8c1ba213.png",
+    },
+    {
+      name: "Zircuit",
+      address: "0x0000000000000000000000000000000000000000",
+      symbol: "ZRC",
+      decimals: 18,
+      image: "https://wallet-api-production.s3.amazonaws.com/uploads/tokens/eth_288.png",
+    },
+    {
+      name: "USDC on Zircuit",
+      address: "0xA512f02EEa71580CBB7B5C3017F1f80A365f8329",
+      symbol: "USDC",
+      decimals: 6,
+      image:
+        "https://d3r81g40ycuhqg.cloudfront.net/wallet/wais/44/2b/442b80bd16af0c0d9b22e03a16753823fe826e5bfd457292b55fa0ba8c1ba213.png",
+    },
+    {
+      name: "Basr ",
+      address: "0x0000000000000000000000000000000000000000",
+      symbol: "BASE",
+      decimals: 18,
+      image: "https://wallet-api-production.s3.amazonaws.com/uploads/tokens/eth_288.png",
+    },
+    {
+      name: "USDC on Base",
+      address: "0xA512f02EEa71580CBB7B5C3017F1f80A365f8329",
+      symbol: "USDC",
+      decimals: 6,
+      image:
+        "https://d3r81g40ycuhqg.cloudfront.net/wallet/wais/44/2b/442b80bd16af0c0d9b22e03a16753823fe826e5bfd457292b55fa0ba8c1ba213.png",
+    },
+    {
+      name: "Morph",
       address: "0x0000000000000000000000000000000000000000",
       symbol: "ETH",
       decimals: 18,
       image: "https://wallet-api-production.s3.amazonaws.com/uploads/tokens/eth_288.png",
     },
     {
-      name: "USDC",
+      name: "USDC on Morph",
       address: "0xA512f02EEa71580CBB7B5C3017F1f80A365f8329",
       symbol: "USDC",
       decimals: 6,
